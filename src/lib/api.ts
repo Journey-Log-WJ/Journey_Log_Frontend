@@ -90,13 +90,15 @@ export async function getSeries(slug: string): Promise<SeriesDetail | null> {
   return res.json() as Promise<SeriesDetail>;
 }
 
-export type RoadmapStatus = "PLANNING" | "DOING" | "DONE";
+export type RoadmapStatus = "PLANNED" | "IN_PROGRESS" | "SUCCEEDED" | "FAILED" | "LEARNED";
 
 export type RoadmapItem = {
   id: number;
   slug: string;
   title: string;
   description: string | null;
+  period: string | null;
+  story: string | null;
   status: RoadmapStatus;
   targetDate: string | null;
   sortOrder: number;
@@ -104,4 +106,18 @@ export type RoadmapItem = {
 
 export async function getRoadmaps(): Promise<RoadmapItem[]> {
   return fetchJson<RoadmapItem[]>("/api/roadmaps");
+}
+
+export async function getRoadmap(slug: string): Promise<RoadmapItem | null> {
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    // slug already decoded
+  }
+  const url = `${API_BASE}/api/roadmaps/${encodeURIComponent(decoded)}`;
+  const res = await fetch(url, { next: { revalidate: 60 } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
+  return res.json() as Promise<RoadmapItem>;
 }
