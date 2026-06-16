@@ -35,6 +35,9 @@ export default function RootLayout({
               <Link href="/log" className="hover:text-zinc-950 dark:hover:text-zinc-50">
                 log
               </Link>
+              <Link href="/roadmap" className="hover:text-zinc-950 dark:hover:text-zinc-50">
+                roadmap
+              </Link>
             </div>
           </nav>
         </header>

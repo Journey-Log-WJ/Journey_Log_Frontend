@@ -89,3 +89,19 @@ export async function getSeries(slug: string): Promise<SeriesDetail | null> {
   if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
   return res.json() as Promise<SeriesDetail>;
 }
+
+export type RoadmapStatus = "PLANNING" | "DOING" | "DONE";
+
+export type RoadmapItem = {
+  id: number;
+  slug: string;
+  title: string;
+  description: string | null;
+  status: RoadmapStatus;
+  targetDate: string | null;
+  sortOrder: number;
+};
+
+export async function getRoadmaps(): Promise<RoadmapItem[]> {
+  return fetchJson<RoadmapItem[]>("/api/roadmaps");
+}
