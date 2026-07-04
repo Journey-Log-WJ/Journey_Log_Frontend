@@ -132,6 +132,7 @@ export type ContributionsResponse = {
   days: ContributionDay[];
 };
 
-export async function getContributions(): Promise<ContributionsResponse> {
-  return fetchJson<ContributionsResponse>("/api/contributions");
+export async function getContributions(year?: string): Promise<ContributionsResponse> {
+  const q = year ? `?year=${encodeURIComponent(year)}` : "";
+  return fetchJson<ContributionsResponse>(`/api/contributions${q}`);
 }
