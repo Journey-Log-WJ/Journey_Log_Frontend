@@ -1,9 +1,24 @@
 import Link from "next/link";
 import ContributionsCalendar from "@/components/ContributionsCalendar";
+import YearSelector from "@/components/YearSelector";
 import { getContributions } from "@/lib/api";
 
-export default async function Home() {
-  const contributions = await getContributions().catch(() => null);
+const EARLIEST_YEAR = 2020;
+
+function availableYears(): number[] {
+  const now = new Date().getFullYear();
+  const years: number[] = [];
+  for (let y = now; y >= EARLIEST_YEAR; y--) years.push(y);
+  return years;
+}
+
+type PageProps = {
+  searchParams: Promise<{ year?: string }>;
+};
+
+export default async function Home({ searchParams }: PageProps) {
+  const { year } = await searchParams;
+  const contributions = await getContributions(year).catch(() => null);
 
   return (
     <div className="flex flex-col gap-12">
@@ -27,9 +42,12 @@ export default async function Home() {
 
       {contributions && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-500">
-            Contributions
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-500">
+              Contributions
+            </h2>
+            <YearSelector years={availableYears()} />
+          </div>
           <ContributionsCalendar
             days={contributions.days}
             totalCount={contributions.totalCount}
