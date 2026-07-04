@@ -121,3 +121,17 @@ export async function getRoadmap(slug: string): Promise<RoadmapItem | null> {
   if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
   return res.json() as Promise<RoadmapItem>;
 }
+
+export type ContributionDay = {
+  date: string;
+  count: number;
+};
+
+export type ContributionsResponse = {
+  totalCount: number;
+  days: ContributionDay[];
+};
+
+export async function getContributions(): Promise<ContributionsResponse> {
+  return fetchJson<ContributionsResponse>("/api/contributions");
+}
