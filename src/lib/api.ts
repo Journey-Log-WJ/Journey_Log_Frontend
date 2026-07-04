@@ -136,3 +136,94 @@ export async function getContributions(year?: string): Promise<ContributionsResp
   const q = year ? `?year=${encodeURIComponent(year)}` : "";
   return fetchJson<ContributionsResponse>(`/api/contributions${q}`);
 }
+
+export type SkillLevel = "상" | "중" | "하";
+export type SkillItem = { name: string; level?: SkillLevel };
+
+export type CareerProject = {
+  title: string;
+  period: string;
+  details: string[];
+};
+
+export type CareerItem = {
+  company: string;
+  position?: string;
+  role?: string;
+  period: string;
+  isCurrent?: boolean;
+  region?: string;
+  resignReason?: string;
+  summary?: string;
+  projects?: CareerProject[];
+  stack?: string[];
+  sortOrder: number;
+};
+
+export type EducationItem = {
+  school: string;
+  department?: string;
+  period: string;
+  status?: string;
+  region?: string;
+  gpa?: string;
+  projects?: string[];
+  sortOrder: number;
+};
+
+export type TrainingItem = {
+  org: string;
+  course: string;
+  period: string;
+  learned?: string[];
+  sortOrder: number;
+};
+
+export type CertificationItem = {
+  name: string;
+  issuer: string;
+  acquiredAt: string;
+};
+
+export type PortfolioItem = {
+  title: string;
+  url: string;
+  period: string;
+  teamSize?: number;
+};
+
+export type AboutProfile = {
+  name: string;
+  tagline: string;
+  email: string;
+  region: string;
+  careerPeriod: string;
+  isEmployed: boolean;
+  desiredSalary?: string;
+  contacts: {
+    githubPersonal?: string;
+    githubWork?: string;
+    velog?: string;
+    blog?: string;
+  };
+  intro: string;
+};
+
+export type AboutContent = {
+  profile: AboutProfile;
+  careers: CareerItem[];
+  educations: EducationItem[];
+  trainings: TrainingItem[];
+  certifications: CertificationItem[];
+  skills: Record<string, SkillItem[]>;
+  portfolios: PortfolioItem[];
+  military?: { status: string; type: string; period: string };
+  coverLetter: string;
+};
+
+export async function getAbout(): Promise<AboutContent | null> {
+  const res = await fetch(`${API_BASE}/api/about`, { next: { revalidate: 60 } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`API /api/about failed: ${res.status}`);
+  return res.json() as Promise<AboutContent>;
+}
