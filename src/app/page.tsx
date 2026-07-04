@@ -1,6 +1,10 @@
 import Link from "next/link";
+import ContributionsCalendar from "@/components/ContributionsCalendar";
+import { getContributions } from "@/lib/api";
 
-export default function Home() {
+export default async function Home() {
+  const contributions = await getContributions().catch(() => null);
+
   return (
     <div className="flex flex-col gap-12">
       <section className="flex flex-col gap-3">
@@ -17,9 +21,21 @@ export default function Home() {
         <ul className="flex flex-col gap-2 text-zinc-700 dark:text-zinc-300">
           <li>· 저니로그 만드는 중 — Spring Boot · Next.js · Neon Postgres</li>
           <li>· 노션/Velog 글을 한 곳으로 모으는 동기화 작업</li>
-          <li>· 다음: Vercel 배포, /about · /roadmap · /projects 페이지 확장</li>
+          <li>· 다음: Vercel 배포, /about · /projects 페이지 확장</li>
         </ul>
       </section>
+
+      {contributions && (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-500">
+            Contributions
+          </h2>
+          <ContributionsCalendar
+            days={contributions.days}
+            totalCount={contributions.totalCount}
+          />
+        </section>
+      )}
 
       <section>
         <Link
