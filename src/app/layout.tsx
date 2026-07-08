@@ -38,6 +38,9 @@ export default function RootLayout({
               <Link href="/log" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
                 log
               </Link>
+              <Link href="/projects" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
+                projects
+              </Link>
               <Link href="/roadmap" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
                 roadmap
               </Link>
