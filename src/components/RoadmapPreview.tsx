@@ -1,14 +1,6 @@
 import Link from "next/link";
 import type { RoadmapItem, RoadmapStatus } from "@/lib/api";
 
-const STATUS_LABEL: Record<RoadmapStatus, string> = {
-  LEARNED: "지나온 길",
-  SUCCEEDED: "지나온 길",
-  FAILED: "지나온 길",
-  IN_PROGRESS: "현재",
-  PLANNED: "앞으로",
-};
-
 const PIN_COLOR: Record<RoadmapStatus, string> = {
   LEARNED: "#B08D57",
   SUCCEEDED: "#B08D57",
@@ -402,9 +394,6 @@ export default function RoadmapPreview({ items }: Props) {
           >
             <span className="text-sm font-mono text-stone-500">{item.period ?? ""}</span>
             <span className="text-lg font-semibold tracking-tight">{item.title}</span>
-            <span className="text-xs uppercase tracking-widest text-stone-500">
-              {STATUS_LABEL[item.status]}
-            </span>
           </Link>
         ))}
       </div>
