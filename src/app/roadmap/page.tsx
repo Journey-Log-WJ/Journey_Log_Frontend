@@ -54,10 +54,19 @@ export default async function RoadmapPage() {
   const totalH = ROW_HEIGHT * N;
   const freq = Math.max(1, N / 4);
 
-  const pathPoints = Array.from({ length: N * 20 + 1 }, (_, i) => {
-    const { x, y } = sampleRoad(i / (N * 20), totalH, freq);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(" ");
+  const SAMPLES = N * 20;
+  const firstPlannedIdx = items.findIndex((it) => it.status === "PLANNED");
+  const constructionStart =
+    firstPlannedIdx === -1 ? SAMPLES + 1 : Math.round((firstPlannedIdx / N) * SAMPLES);
+
+  const allPoints = Array.from({ length: SAMPLES + 1 }, (_, i) => {
+    const { x, y } = sampleRoad(i / SAMPLES, totalH, freq);
+    return { x, y };
+  });
+  const asStr = (pt: { x: number; y: number }) => `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
+  const builtPoints = allPoints.slice(0, constructionStart + 1).map(asStr).join(" ");
+  const constructionPoints = allPoints.slice(constructionStart).map(asStr).join(" ");
+  const conePos = allPoints[Math.min(constructionStart, SAMPLES)];
 
   const pins = items.map((item, idx) => {
     const t = (idx + 0.5) / N;
@@ -84,8 +93,9 @@ export default async function RoadmapPage() {
             style={{ width: `${ROAD_WIDTH}px`, height: `${totalH}px` }}
             aria-hidden
           >
+            {/* 완성된 도로 */}
             <polyline
-              points={pathPoints}
+              points={builtPoints}
               fill="none"
               stroke="#27272a"
               strokeWidth={28}
@@ -93,13 +103,65 @@ export default async function RoadmapPage() {
               strokeLinejoin="round"
             />
             <polyline
-              points={pathPoints}
+              points={builtPoints}
               fill="none"
               stroke="#fafafa"
               strokeWidth={2}
               strokeDasharray="10 8"
               strokeLinecap="round"
             />
+
+            {/* 공사 중 도로 (성균관대 이후) */}
+            {firstPlannedIdx !== -1 && (
+              <>
+                <polyline
+                  points={constructionPoints}
+                  fill="none"
+                  stroke="#a1a1aa"
+                  strokeWidth={28}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="14 14"
+                  opacity={0.55}
+                >
+                  <animate
+                    attributeName="stroke-dashoffset"
+                    from="0"
+                    to="-28"
+                    dur="1.4s"
+                    repeatCount="indefinite"
+                  />
+                </polyline>
+                <polyline
+                  points={constructionPoints}
+                  fill="none"
+                  stroke="#f59e0b"
+                  strokeWidth={3}
+                  strokeDasharray="8 10"
+                  strokeLinecap="round"
+                  opacity={0.9}
+                >
+                  <animate
+                    attributeName="stroke-dashoffset"
+                    from="0"
+                    to="-18"
+                    dur="1s"
+                    repeatCount="indefinite"
+                  />
+                </polyline>
+                {conePos && (
+                  <text
+                    x={conePos.x}
+                    y={conePos.y - 22}
+                    textAnchor="middle"
+                    fontSize={22}
+                  >
+                    🚧
+                  </text>
+                )}
+              </>
+            )}
+
             {pins.map(({ item, x, y, idx }) => {
               const color = STATUS_COLOR[item.status].pin;
               return (
