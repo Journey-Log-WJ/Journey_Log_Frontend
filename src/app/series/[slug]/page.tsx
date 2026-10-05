@@ -1,16 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSeries } from "@/lib/api";
+import { formatDate } from "@/lib/format";
+import { BackLink, Eyebrow } from "@/components/ui";
 import SeriesPostList from "./SeriesPostList";
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -22,17 +14,14 @@ export default async function SeriesPage({ params }: PageProps) {
   if (!series) notFound();
 
   return (
-    <div className="flex flex-col gap-10">
-      <Link href="/log" className="text-sm text-zinc-500 hover:underline w-fit">
-        ← log
-      </Link>
+    <div className="flex flex-col gap-12 py-6">
+      <BackLink href="/log" label="기록으로" />
 
-      <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{series.name}</h1>
-        {series.description && (
-          <p className="text-zinc-600 dark:text-zinc-400">{series.description}</p>
-        )}
-        <div className="flex items-center gap-2 text-xs text-zinc-500">
+      <header className="animate-fade-up flex flex-col gap-4">
+        <Eyebrow>Series</Eyebrow>
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{series.name}</h1>
+        {series.description && <p className="text-base sm:text-lg text-muted max-w-2xl">{series.description}</p>}
+        <div className="flex items-center gap-2 text-sm text-muted">
           <span>{series.postsCount}개 글</span>
           {series.updatedAt && (
             <>

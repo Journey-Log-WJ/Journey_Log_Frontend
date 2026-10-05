@@ -3,17 +3,15 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { SeriesPostItem } from "@/lib/api";
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/format";
+import { TagList } from "@/components/ui";
 
 type Order = "asc" | "desc";
+
+const ORDER_OPTIONS: { value: Order; label: string }[] = [
+  { value: "desc", label: "최신 순" },
+  { value: "asc", label: "오래된 순" },
+];
 
 export default function SeriesPostList({ posts }: { posts: SeriesPostItem[] }) {
   const [order, setOrder] = useState<Order>("desc");
@@ -25,66 +23,41 @@ export default function SeriesPostList({ posts }: { posts: SeriesPostItem[] }) {
   }, [posts, order]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-3 text-xs">
-        <button
-          type="button"
-          onClick={() => setOrder("asc")}
-          className={
-            order === "asc"
-              ? "font-medium text-zinc-950 dark:text-zinc-50"
-              : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-          }
-        >
-          오래된 순
-        </button>
-        <span className="text-zinc-300 dark:text-zinc-700">|</span>
-        <button
-          type="button"
-          onClick={() => setOrder("desc")}
-          className={
-            order === "desc"
-              ? "font-medium text-zinc-950 dark:text-zinc-50"
-              : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-          }
-        >
-          최신 순
-        </button>
+    <div className="flex flex-col gap-6">
+      <div className="inline-flex w-fit rounded-full border border-line bg-surface p-1 text-sm">
+        {ORDER_OPTIONS.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => setOrder(o.value)}
+            className={`rounded-full px-4 py-1.5 transition-colors ${
+              order === o.value ? "bg-surface-hover text-foreground font-semibold" : "text-muted hover:text-foreground"
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
       </div>
 
-      <ol className="flex flex-col gap-6">
+      <ol className="flex flex-col gap-3">
         {sorted.map((post) => (
-          <li key={post.id} className="flex gap-4">
-            <span className="font-mono text-sm text-zinc-400 pt-0.5 w-6 text-right shrink-0">
-              {post.seriesIndex ?? "·"}
-            </span>
-            <div className="flex flex-col gap-1.5 flex-1">
-              <Link href={`/log/${post.slug}`} className="group flex flex-col gap-1.5">
-                <h2 className="font-medium tracking-tight group-hover:underline">
-                  {post.title}
-                </h2>
-                {post.excerpt && (
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                )}
-              </Link>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
-                <time>{formatDate(post.publishedAt)}</time>
-                {post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag.id}
-                        className="rounded bg-zinc-100 px-1.5 py-0.5 dark:bg-zinc-800"
-                      >
-                        {tag.name}
-                      </span>
-                    ))}
-                  </div>
-                )}
+          <li key={post.id}>
+            <Link
+              href={`/log/${post.slug}`}
+              className="group flex gap-5 rounded-3xl border border-line bg-surface p-6 transition-all hover:-translate-y-0.5 hover:border-accent/40"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft font-mono text-sm font-bold text-accent-2">
+                {post.seriesIndex ?? "·"}
+              </span>
+              <div className="flex flex-col gap-2 min-w-0">
+                <h2 className="text-lg font-bold tracking-tight group-hover:text-accent-2 transition-colors">{post.title}</h2>
+                {post.excerpt && <p className="text-sm text-muted line-clamp-2">{post.excerpt}</p>}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <time className="text-xs font-mono text-muted">{formatDate(post.publishedAt)}</time>
+                  <TagList tags={post.tags} />
+                </div>
               </div>
-            </div>
+            </Link>
           </li>
         ))}
       </ol>
