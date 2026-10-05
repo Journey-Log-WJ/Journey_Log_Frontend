@@ -17,18 +17,19 @@ export function levelFor(count: number, thresholds: readonly number[]): HeatmapL
   return 4;
 }
 
+// 색은 globals.css의 heat-0~4 토큰
 export const HEATMAP_FILL_CLASS: readonly string[] = [
-  "fill-zinc-200 dark:fill-zinc-800",
-  "fill-emerald-200 dark:fill-emerald-900",
-  "fill-emerald-400 dark:fill-emerald-700",
-  "fill-emerald-500",
-  "fill-emerald-600 dark:fill-emerald-300",
+  "fill-heat-0",
+  "fill-heat-1",
+  "fill-heat-2",
+  "fill-heat-3",
+  "fill-heat-4",
 ];
 
 export const HEATMAP_BG_CLASS: readonly string[] = [
-  "bg-zinc-200 dark:bg-zinc-800",
-  "bg-emerald-200 dark:bg-emerald-900",
-  "bg-emerald-400 dark:bg-emerald-700",
-  "bg-emerald-500",
-  "bg-emerald-600 dark:bg-emerald-300",
+  "bg-heat-0",
+  "bg-heat-1",
+  "bg-heat-2",
+  "bg-heat-3",
+  "bg-heat-4",
 ];
