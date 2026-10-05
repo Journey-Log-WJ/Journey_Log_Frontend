@@ -1,17 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPost } from "@/lib/api";
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/format";
+import { BackLink, TagList } from "@/components/ui";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -23,31 +15,16 @@ export default async function PostPage({ params }: PageProps) {
   if (!post) notFound();
 
   return (
-    <article className="flex flex-col gap-8">
-      <Link href="/log" className="text-sm text-zinc-500 hover:underline w-fit">
-        ← log
-      </Link>
+    <article className="flex flex-col gap-10 py-6 max-w-3xl mx-auto w-full">
+      <BackLink href="/log" label="기록으로" />
 
-      <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{post.title}</h1>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
-          <time>{formatDate(post.publishedAt)}</time>
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="rounded bg-zinc-100 px-1.5 py-0.5 dark:bg-zinc-800"
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
+      <header className="animate-fade-up flex flex-col gap-4 border-b border-line pb-8">
+        <time className="text-sm font-mono text-muted">{formatDate(post.publishedAt)}</time>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">{post.title}</h1>
+        <TagList tags={post.tags} />
       </header>
 
-      <div className="prose prose-zinc dark:prose-invert max-w-none">
+      <div className="prose prose-invert max-w-none prose-headings:font-[family-name:var(--font-display)] prose-headings:tracking-tight prose-p:text-foreground/90 prose-li:text-foreground/90 prose-strong:text-foreground prose-a:text-accent-2 prose-code:text-accent-2 prose-pre:bg-surface prose-pre:border prose-pre:border-line prose-blockquote:border-accent prose-hr:border-line">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
       </div>
     </article>

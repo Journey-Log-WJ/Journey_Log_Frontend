@@ -1,7 +1,30 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import type { Tag } from "@/lib/api";
 
 // 페이지 공용 UI 조각 — 색은 globals.css 토큰만 사용
+
+export function BackLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link href={href} className="group inline-flex w-fit items-center gap-1.5 text-sm text-muted hover:text-foreground">
+      <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
+      {label}
+    </Link>
+  );
+}
+
+export function TagList({ tags }: { tags: Tag[] }) {
+  if (tags.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <span key={tag.id} className="text-xs text-accent-2">
+          #{tag.name}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export function Chip({ children }: { children: React.ReactNode }) {
   return (
