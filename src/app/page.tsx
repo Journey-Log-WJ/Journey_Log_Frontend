@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight, BookOpen, Building2, Mail } from "lucide-reac
 import ContributionsCalendar from "@/components/ContributionsCalendar";
 import YearSelector from "@/components/YearSelector";
 import { GithubIcon } from "@/components/icons";
+import { Chip, SectionHeader } from "@/components/ui";
 import { getAbout, getContributions, getPosts } from "@/lib/api";
 import { PROJECTS } from "@/lib/projects";
 
@@ -33,39 +34,6 @@ function availableYears(): number[] {
   const years: number[] = [];
   for (let y = now; y >= EARLIEST_YEAR; y--) years.push(y);
   return years;
-}
-
-function SectionHeader({ eyebrow, title, href, linkLabel }: {
-  eyebrow: string;
-  title: string;
-  href?: string;
-  linkLabel?: string;
-}) {
-  return (
-    <div className="flex items-end justify-between gap-4">
-      <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">{eyebrow}</span>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
-      </div>
-      {href && (
-        <Link
-          href={href}
-          className="group inline-flex items-center gap-1 text-sm text-muted hover:text-foreground shrink-0"
-        >
-          {linkLabel}
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-        </Link>
-      )}
-    </div>
-  );
-}
-
-function Chip({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-xs px-2.5 py-1 rounded-md border border-line bg-surface text-muted">
-      {children}
-    </span>
-  );
 }
 
 type PageProps = {
