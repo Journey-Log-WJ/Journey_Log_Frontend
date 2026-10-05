@@ -1,26 +1,113 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* 제목용 폰트 — 페이퍼로지 (눈누, OFL·웹 임베딩 허용). 쓰는 굵기만 로드 */
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+/* 사이트는 다크 단일 테마 — html.dark 고정이라 dark: 유틸리티가 항상 적용됨 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 에스프레소 브라운 팔레트 (주황기 뺀 모던 브라운). 색 값은 여기서만 정의 */
+@theme {
+  --color-espresso-900: #2a211c;
+  --color-espresso-800: #352a24;
+  --color-espresso-700: #43362e;
+  --color-espresso-300: #b9aa9c;
+  --color-cream: #f5efe8;
+  /* 포인트 — 벽돌 레드 + 모던 브라운(모카·라떼) */
+  --color-brick: #d0604c;
+  --color-brick-deep: #b04e3c;
+  --color-mocha: #a47864;
+  --color-latte: #c9a88f;
+}
+
+/* 디자인 토큰 — 컴포넌트는 이 이름만 씀 */
 :root {
-  --background: #f5ede0;
-  --foreground: #3d2f22;
+  color-scheme: dark;
+  --background: var(--color-espresso-900);
+  --foreground: var(--color-cream);
+  --surface: var(--color-espresso-800);
+  --surface-hover: var(--color-espresso-700);
+  --line: color-mix(in oklab, var(--color-cream) 9%, transparent);
+  --muted: var(--color-espresso-300);
+  /* 대비 규칙: 빨강은 면(점·배지·테두리), 버튼은 진한 빨강, 배경 위 글자는 라떼 */
+  --accent: var(--color-brick);
+  --accent-strong: var(--color-brick-deep);
+  --accent-soft: color-mix(in oklab, var(--color-brick) 16%, transparent);
+  --accent-2: var(--color-latte);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-2: var(--accent-2);
+  --font-sans: "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-display: "Paperozi", "Pretendard Variable", Pretendard, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #2a2016;
-    --foreground: #f0e4d0;
+/* 제목은 페이퍼로지, 본문은 프리텐다드 */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+}
+
+@theme {
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
 body {
-  background: var(--background);
+  /* 위쪽에 은은한 조명 + 코냑 빛 번짐 — 단색 평면 느낌 줄이기 */
+  background:
+    radial-gradient(900px 500px at 15% -5%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%),
+    radial-gradient(1100px 600px at 90% 0%, color-mix(in oklab, var(--color-white) 7%, transparent), transparent 70%),
+    var(--background);
+  background-attachment: fixed;
   color: var(--foreground);
+  word-break: keep-all;
 }

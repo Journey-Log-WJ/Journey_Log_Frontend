@@ -13,6 +13,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const NAV_ITEMS = [
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/log", label: "Log" },
+  { href: "/roadmap", label: "Roadmap" },
+];
+
 export const metadata: Metadata = {
   title: "저니로그",
   description: "원준의 살아있는 이력서 — 과거·현재·미래의 기록",
@@ -24,26 +31,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="ko" className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <header className="sticky top-0 z-40 border-b border-[#8B5A2B]/15 bg-[#f5ede0]/85 dark:bg-[#2a2016]/85 backdrop-blur-md">
+        <header className="sticky top-0 z-40 border-b border-line bg-background/70 backdrop-blur-xl">
           <nav className="max-w-5xl mx-auto flex items-center justify-between px-6 h-14">
-            <Link href="/" className="font-semibold tracking-tight text-[#8B5A2B] dark:text-[#D4A574]">
-              저니로그
+            <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+              <span className="size-2 rounded-full bg-accent" />
+              JourneyLog
             </Link>
-            <div className="flex items-center gap-6 text-sm text-stone-600 dark:text-stone-400">
-              <Link href="/about" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
-                about
-              </Link>
-              <Link href="/log" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
-                log
-              </Link>
-              <Link href="/projects" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
-                projects
-              </Link>
-              <Link href="/roadmap" className="hover:text-[#8B5A2B] dark:hover:text-[#D4A574]">
-                roadmap
-              </Link>
+            <div className="flex items-center gap-1 text-sm text-muted">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="px-3 py-1.5 rounded-full hover:text-foreground hover:bg-surface-hover transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </nav>
         </header>
