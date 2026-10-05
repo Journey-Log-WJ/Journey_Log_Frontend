@@ -33,7 +33,7 @@ export default function YearSelector({
     <select
       value={current}
       onChange={onChange}
-      className="text-xs bg-transparent border border-zinc-300 dark:border-zinc-700 rounded px-2 py-1 text-zinc-700 dark:text-zinc-300"
+      className="text-xs bg-surface border border-line rounded-full px-3 py-1 text-foreground"
     >
       <option value="">{defaultLabel}</option>
       {years.map((y) => (

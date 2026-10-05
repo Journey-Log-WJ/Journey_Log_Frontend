@@ -43,6 +43,11 @@
   --color-brick-deep: #b04e3c;
   --color-mocha: #a47864;
   --color-latte: #c9a88f;
+  /* 잔디 — 깊고 진한 포레스트 그린 */
+  --color-forest-900: #23402d;
+  --color-forest-700: #2f5e3d;
+  --color-forest-500: #3f7f50;
+  --color-forest-300: #5fa36d;
 }
 
 /* 디자인 토큰 — 컴포넌트는 이 이름만 씀 */
@@ -59,6 +64,12 @@
   --accent-strong: var(--color-brick-deep);
   --accent-soft: color-mix(in oklab, var(--color-brick) 16%, transparent);
   --accent-2: var(--color-latte);
+  /* 잔디 5단계 — 포레스트 그린. 빈 칸은 배경에 묻히는 에스프레소 */
+  --heat-0: var(--color-espresso-700);
+  --heat-1: var(--color-forest-900);
+  --heat-2: var(--color-forest-700);
+  --heat-3: var(--color-forest-500);
+  --heat-4: var(--color-forest-300);
 }
 
 @theme inline {
@@ -72,6 +83,11 @@
   --color-accent-strong: var(--accent-strong);
   --color-accent-soft: var(--accent-soft);
   --color-accent-2: var(--accent-2);
+  --color-heat-0: var(--heat-0);
+  --color-heat-1: var(--heat-1);
+  --color-heat-2: var(--heat-2);
+  --color-heat-3: var(--heat-3);
+  --color-heat-4: var(--heat-4);
   --font-sans: "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-display: "Paperozi", "Pretendard Variable", Pretendard, system-ui, sans-serif;

@@ -19,7 +19,7 @@ const MIN_LABEL_GAP = 3 * STEP;
 
 export default function ContributionsCalendar({ days, totalCount }: Props) {
   if (days.length === 0) {
-    return <p className="text-sm text-zinc-500">잔디 데이터를 불러올 수 없습니다.</p>;
+    return <p className="text-sm text-muted">잔디 데이터를 불러올 수 없습니다.</p>;
   }
 
   const byDate = new Map(days.map((d) => [d.date, d]));
@@ -82,7 +82,7 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
           y={HEADER_H + dow * STEP}
           width={CELL}
           height={CELL}
-          rx={2}
+          rx={3}
           className={HEATMAP_FILL_CLASS[level]}
         >
           <title>{`${key} — ${count}건`}</title>
@@ -94,10 +94,10 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <span className="text-sm text-zinc-600 dark:text-zinc-400">
-          <span className="font-medium text-zinc-950 dark:text-zinc-50">{totalCount}</span>건
+        <span className="text-sm text-muted">
+          <span className="text-lg font-bold text-accent-2">{totalCount}</span>건
         </span>
-        <span className="text-xs text-zinc-500">(개인 + 회사 계정 합산)</span>
+        <span className="text-xs text-muted">(개인 + 회사 계정 합산)</span>
       </div>
       <div className="overflow-x-auto">
         <svg
@@ -115,7 +115,7 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
               x2={x}
               y2={height}
               strokeWidth={1}
-              className="stroke-zinc-300 dark:stroke-zinc-700"
+              className="stroke-line"
             />
           ))}
           {monthLabels.map((m) => (
@@ -124,7 +124,7 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
               x={m.x + 2}
               y={12}
               fontSize={10}
-              className="fill-zinc-500"
+              className="fill-muted"
             >
               {m.label}
             </text>
@@ -132,12 +132,12 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
           {cells}
         </svg>
       </div>
-      <div className="flex items-center gap-1.5 text-xs text-zinc-500 self-end">
+      <div className="flex items-center gap-1.5 text-xs text-muted self-end">
         <span>Less</span>
         {HEATMAP_BG_CLASS.map((cls, i) => (
           <span
             key={i}
-            className={`inline-block rounded-sm ${cls}`}
+            className={`inline-block rounded-[3px] ${cls}`}
             style={{ width: `${CELL}px`, height: `${CELL}px` }}
           />
         ))}
