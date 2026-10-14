@@ -102,8 +102,7 @@ export default function ProjectsPage() {
                     <span className="rounded-full bg-accent-soft text-accent-2 px-2.5 py-0.5 font-semibold">대표</span>
                   )}
                   {p.status === "live" && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 font-semibold text-foreground">
-                      <span className="size-1.5 rounded-full bg-accent" />
+                    <span className="rounded-full border border-line px-2.5 py-0.5 font-semibold text-foreground">
                       LIVE
                     </span>
                   )}

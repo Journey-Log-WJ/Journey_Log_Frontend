@@ -5,6 +5,12 @@
 /* 제목용 폰트 — 페이퍼로지 (눈누, OFL·웹 임베딩 허용). 쓰는 굵기만 로드 */
 @font-face {
   font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Paperozi";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2") format("woff2");
   font-weight: 500;
   font-display: swap;
@@ -48,6 +54,13 @@
   --color-forest-700: #2f5e3d;
   --color-forest-500: #3f7f50;
   --color-forest-300: #5fa36d;
+  /* 글자 크기 - 페이퍼로지 본문이 잘 읽히는 17px 기준 (기본 12/14/16 → 15/17/17) */
+  --text-xs: 0.9375rem;
+  --text-xs--line-height: calc(1.4 / 0.9375);
+  --text-sm: 1.0625rem;
+  --text-sm--line-height: calc(1.6 / 1.0625);
+  --text-base: 1.0625rem;
+  --text-base--line-height: calc(1.75 / 1.0625);
 }
 
 /* 디자인 토큰 — 컴포넌트는 이 이름만 씀 */
@@ -88,12 +101,12 @@
   --color-heat-2: var(--heat-2);
   --color-heat-3: var(--heat-3);
   --color-heat-4: var(--heat-4);
-  --font-sans: "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: "Paperozi", "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-display: "Paperozi", "Pretendard Variable", Pretendard, system-ui, sans-serif;
 }
 
-/* 제목은 페이퍼로지, 본문은 프리텐다드 */
+/* 제목·본문 모두 페이퍼로지 (본문은 400, 한글 글리프 없으면 프리텐다드로 대체) */
 @layer base {
   h1,
   h2,

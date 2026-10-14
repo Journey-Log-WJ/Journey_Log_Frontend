@@ -195,7 +195,7 @@ export default async function AboutPage() {
         <Section eyebrow="Etc" title="취업 우대사항">
           <div className="rounded-2xl border border-line bg-surface p-5 text-sm">
             <span className="font-semibold">병역 · {military.status}</span>
-            <span className="text-muted"> — {military.type} ({military.period})</span>
+            <span className="text-muted"> - {military.type} ({military.period})</span>
           </div>
         </Section>
       )}

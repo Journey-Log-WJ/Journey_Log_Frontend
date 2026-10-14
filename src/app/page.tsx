@@ -67,11 +67,7 @@ export default async function Home({ searchParams }: PageProps) {
       <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-16 pt-8">
         <div className="flex flex-col gap-6 flex-1 min-w-0">
           {profile?.isEmployed && (
-            <span className="self-start inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full rounded-full bg-accent opacity-60 animate-ping" />
-                <span className="relative inline-flex size-2 rounded-full bg-accent" />
-              </span>
+            <span className="self-start rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted">
               재직중 · {profile.careerPeriod}
             </span>
           )}
@@ -133,8 +129,8 @@ export default async function Home({ searchParams }: PageProps) {
       <section className="animate-fade-up [animation-delay:100ms] grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-2xl border border-line bg-surface p-5 flex flex-col gap-1">
-            <span className="text-2xl sm:text-3xl font-bold tracking-tight text-accent-2">{s.value}</span>
             <span className="text-sm text-muted">{s.label}</span>
+            <span className="text-2xl sm:text-3xl font-bold tracking-tight text-accent-2">{s.value}</span>
           </div>
         ))}
       </section>
@@ -234,8 +230,7 @@ export default async function Home({ searchParams }: PageProps) {
                           {[c.role, c.position].filter(Boolean).join(" · ")}
                         </span>
                       </div>
-                      <span className="text-sm font-mono text-muted shrink-0 flex items-center gap-2">
-                        {c.isCurrent && <span className="size-1.5 rounded-full bg-accent" />}
+                      <span className="text-sm font-mono text-muted shrink-0">
                         {c.period}
                       </span>
                     </div>
