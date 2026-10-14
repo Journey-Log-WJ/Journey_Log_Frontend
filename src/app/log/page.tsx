@@ -55,7 +55,7 @@ export default async function LogPage() {
                   href={`/log/${post.slug}`}
                   className="group grid grid-cols-1 sm:grid-cols-[9rem_1fr] gap-2 sm:gap-6 py-6"
                 >
-                  <time className="text-sm font-mono text-muted pt-0.5">{formatDate(post.publishedAt)}</time>
+                  <time className="text-sm tabular-nums text-muted pt-0.5">{formatDate(post.publishedAt)}</time>
                   <div className="flex flex-col gap-2">
                     <h3 className="text-lg font-bold tracking-tight group-hover:text-accent-2 transition-colors">
                       {post.title}
