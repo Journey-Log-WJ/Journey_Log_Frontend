@@ -78,7 +78,7 @@ export default async function RoadmapPage() {
     <div className="flex flex-col gap-10">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">roadmap</h1>
-        <p className="text-sm text-zinc-500">부천대부터 지금까지 — 실패했지만 넘어간 것, 성공했지만 남은 생각</p>
+        <p className="text-sm text-zinc-500">부천대부터 지금까지 - 실패했지만 넘어간 것, 성공했지만 남은 생각</p>
       </header>
 
       {N === 0 ? (

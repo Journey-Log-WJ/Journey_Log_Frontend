@@ -154,7 +154,7 @@ export default async function Home({ searchParams }: PageProps) {
         </section>
       )}
 
-      {/* Projects — 벤토 그리드: 첫 카드는 크게 */}
+      {/* Projects - 벤토 그리드: 첫 카드는 크게 */}
       <section className="flex flex-col gap-8">
         <SectionHeader eyebrow="Projects" title="만든 것들" href="/projects" linkLabel="전체 보기" />
         <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
@@ -206,7 +206,7 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
       </section>
 
-      {/* Experience — 타임라인 */}
+      {/* Experience - 타임라인 */}
       {careers.length > 0 && (
         <section className="flex flex-col gap-8">
           <SectionHeader eyebrow="Experience" title="경력" href="/about" linkLabel="이력서 보기" />
@@ -272,7 +272,7 @@ export default async function Home({ searchParams }: PageProps) {
         </section>
       )}
 
-      {/* Activity — 글 + 잔디 */}
+      {/* Activity - 글 + 잔디 */}
       <section className="flex flex-col gap-8">
         <SectionHeader eyebrow="Activity" title="기록하고 꾸준히" href="/log" linkLabel="모든 글" />
         {latestPosts.length > 0 && (

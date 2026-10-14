@@ -85,7 +85,7 @@ export default function ContributionsCalendar({ days, totalCount }: Props) {
           rx={3}
           className={HEATMAP_FILL_CLASS[level]}
         >
-          <title>{`${key} — ${count}건`}</title>
+          <title>{`${key} - ${count}건`}</title>
         </rect>,
       );
     }

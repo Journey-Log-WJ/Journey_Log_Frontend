@@ -22,7 +22,7 @@ const NAV_ITEMS = [
 
 export const metadata: Metadata = {
   title: "저니로그",
-  description: "원준의 살아있는 이력서 — 과거·현재·미래의 기록",
+  description: "원준의 살아있는 이력서 - 과거·현재·미래의 기록",
 };
 
 export default function RootLayout({
