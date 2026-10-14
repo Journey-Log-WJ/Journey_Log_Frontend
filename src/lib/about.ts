@@ -1,0 +1,273 @@
+import type { AboutContent, CareerItem } from "@/lib/api";
+
+// "2022.05 ~ 2024.04" / "2026.03 ~ 재직중" → 시작·끝 달 포함 개월 수 (잡사이트와 같은 셈법)
+function careerMonths(period: string, now: Date): number {
+  const m = period.match(/(\d{4})\.(\d{1,2})\s*~\s*(?:(\d{4})\.(\d{1,2})|재직중)/);
+  if (!m) return 0;
+  const start = Number(m[1]) * 12 + Number(m[2]);
+  const end = m[3] ? Number(m[3]) * 12 + Number(m[4]) : now.getFullYear() * 12 + now.getMonth() + 1;
+  return Math.max(0, end - start + 1);
+}
+
+// 경력 기간 합계 - 오늘 날짜 기준으로 자동 계산 (재직중이면 매달 늘어남)
+export function totalCareerPeriod(careers: CareerItem[], now = new Date()): string {
+  const total = careers.reduce((sum, c) => sum + careerMonths(c.period, now), 0);
+  const years = Math.floor(total / 12);
+  const months = total % 12;
+  return [years && `${years}년`, months && `${months}개월`].filter(Boolean).join(" ") || "0개월";
+}
+
+// 이력서 데이터 - 홈(/)과 About(/about)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
+export const ABOUT: AboutContent = {
+  profile: {
+    name: "오원준",
+    tagline: "의료 IT 풀스택 개발자",
+    email: "dnjswns0010@naver.com",
+    region: "경기 시흥",
+    // 읽을 때마다 careers 기간으로 계산
+    get careerPeriod() {
+      return totalCareerPeriod(ABOUT.careers);
+    },
+    isEmployed: true,
+    desiredSalary: "4,000 ~ 5,000만원",
+    contacts: {
+      githubPersonal: "https://github.com/WONJUN-KR",
+      githubWork: "https://github.com/WonJun-Uxn",
+      velog: "https://velog.io/@dnjswns0010",
+      blog: "https://blog.naver.com/wonjun13_",
+    },
+    intro:
+      "연속혈당측정(CGM) 의료기기 기업에서 의료 데이터 기반 웹 서비스와 사내 실험 데이터 플랫폼을 프론트엔드부터 백엔드·인프라까지 담당하고 있습니다. " +
+      "온프레미스 서비스의 AWS 무손실 이전, CI/CD 및 무중단 배포 체계 구축, 레거시 시스템 보안 정비를 주도했습니다.",
+  },
+  careers: [
+    {
+      company: "(주)유엑스엔",
+      role: "풀스택 개발",
+      period: "2026.03 ~ 재직중",
+      isCurrent: true,
+      summary: "연속혈당측정 의료기기 웹 서비스·사내 데이터 플랫폼·IoT 플랫폼 6개 프로젝트 동시 담당 (개발부터 인프라·배포까지)",
+      projects: [
+        {
+          title: "개인용 연속혈당 모니터링 서비스 - AWS 이전·배포 전담, 관리자 콘솔 신규 구축",
+          period: "2026.04 ~ 진행중",
+          details: [
+            "온프레미스 → AWS(EC2·RDS) 이전: 34만 행 전 테이블 일치 검증, 전환 다운타임 약 2.5분, 인증서 자동 갱신",
+            "키를 서버에 두지 않는 CI/CD(GitHub Actions + OIDC + SSM)와 nginx blue/green 무중단 배포 - 배포 중 외부 점검 236회 실패 0, 추가 비용 0원",
+            "관리자 콘솔 0→1 구축(사용자·기기·권한 관리, soft delete), 권한 문자열을 코드 기반 RBAC로 무중단 마이그레이션",
+            "React 화면을 서버 UTC 시각 → 사용자 현지 시간 표시로 전환(차트·목록·리포트), jest + jsdom 골든 테스트로 한국 화면 변화 0 검증",
+            "리포트 조회 쿼리 29회 → 3회, 응답 8.0초 → 3.6초",
+            "시간 저장을 UTC 기준(timestamptz)으로 무중단 전환 - 12개 컬럼, 전환 구간 데이터 유실 0행, 골든 마스터 테스트로 화면 변화 없음 증명",
+            "10분 주기 혈당 스냅샷 스케줄러·FCM 푸시 출시, 신규 혈당 알고리즘 적용(저장값 26,920행 교체·전부 일치 검증)",
+            "입력 전처리를 앱과 통일해 앱 결과 일치율 약 40% → 100%",
+          ],
+        },
+        {
+          title: "사내 센서 실험 데이터 분석 플랫폼 - 형상관리·보안·배포 체계 최초 구축",
+          period: "2026.04 ~ 진행중",
+          details: [
+            "git이 없던 레거시 Flask 플랫폼에 형상관리 첫 도입, 코드 전수조사로 위험 항목 문서화",
+            "보안 정비: 89개 라우트 접근제어(관찰 → 차단 2단계 적용), SQL 파라미터 바인딩 전수 적용, 세션·CSRF 보안",
+            "CI/CD: 테스트 게이트 → 헬스체크 → 실패 시 자동 롤백, blue/green 무중단 배포, 테스트 0개 → 211개",
+            "목록 조회 20초 → 0.6초(상관 서브쿼리를 CTE로 재작성)",
+            "센서 원시 전류 → 온도보정 → 절사평균 → 혈당 파이프라인과 시각화(그래프·CSV 값 1,440개 100% 일치), 참조혈당 164,455행 누락 0 적재",
+            "ApexCharts 기반 알고리즘 비교 화면(최대 10개 선 겹쳐 보기·좌우 분할, Y축 범위 직접 입력·축 비율 연동)과 전극 임피던스 그래프·표·CSV 화면",
+            "해외 기기 시간대 처리 - 저장은 UTC, 화면은 보는 사람의 브라우저 시간으로(목록·차트·CSV 전체 적용)",
+            "골든 마스터 테스트로 결과 동일성 유지하며 리팩터링(차트 함수 6→1, SQL 7벌→1, 미사용 코드 373줄 삭제)",
+          ],
+        },
+        {
+          title: "연속혈당 파생 서비스 - 단독 구축·AWS 이관·운영",
+          period: "2026.06 ~ 진행중",
+          details: [
+            "기존 서비스를 복제한 당일 저장소 분리·Docker 배포·HTTPS까지 라이브",
+            "단일 세션과 10초 이내 실시간 강제 로그아웃, Google·Kakao OAuth, UTC 저장·현지 시간 표시",
+            "온프레미스 → AWS 이관 단독 완료(14개 테이블 65,166행 일치, DNS 전환), blue/green 첫 전환 점검 225회 실패 0",
+            "중복 이메일 계정 방지(fail-closed 로그인 + DB partial unique index)",
+            "단위 테스트 15개 → 119개, 작성 중 운영 코드 결함 8건 발견, 테스트 설계서 45개 항목",
+          ],
+        },
+        {
+          title: "IoT 스마트 정수기 플랫폼 (고객사) - Next.js 웹뷰·백엔드 주 개발",
+          period: "2026.04 ~ 진행중",
+          details: [
+            "펌웨어 ↔ Spring ↔ Next.js 웹뷰 WebSocket 통신 0→1 구축, 기기별 Room 라우팅과 마지막 상태 캐시",
+            "Next.js 웹뷰: Zustand 상태 관리, 401 응답 시 토큰 자동 갱신 인터셉터, 웹뷰 ↔ Android 양방향 브릿지(신호 6종 이상)",
+            "Tailwind 전환으로 인라인 스타일 167 → 31개(-81%), 접근성 수정 20곳(div → button), 반응형 23개 파일 정비",
+            "대리점용 관리자 페이지 신규 구축(프론트 PR 32건), 4개 국어(약 350키) 지원",
+            "서버 주도 펌웨어 업데이트(FOTA) 실기기 end-to-end 검증, FCM 보호자 알림",
+            "기기 설치 지역 기준 시간대 처리(19개 컬럼 UTC 전환), 사용량 집계 API, 동시성 버그(ConcurrentHashMap)·커넥션 풀 튜닝",
+          ],
+        },
+        {
+          title: "센서 감도표 관리 도구 - 단독 개발",
+          period: "2026.04 ~ 진행중",
+          details: [
+            "저장소 생성부터 배포까지 단독 구축, 버전 이력·UPSERT 저장, CSV(RFC 4180)·엑셀 일괄 등록",
+            "동시 업로드 중복 생성을 PostgreSQL ON CONFLICT 로 원자화, QA 12건 해결",
+            "대량 갱신은 ROLLBACK 드라이런으로 먼저 검증 후 커밋, 전극별 감도표·모바일 화면 추가",
+          ],
+        },
+        {
+          title: "기타",
+          period: "2026.04 ~",
+          details: [
+            "사내 회의록 정리 도구 신규 풀스택(FastAPI + React·Vite·TypeScript), 무중단 교체 중 연속 요청 3,298건 전부 성공",
+            "팀 문서 저장소 신설(링크·비밀값 자동 검사), PR 컨벤션 정립 후 기존 PR 386개 정리, 6개 프로젝트 인수인계 문서 작성",
+          ],
+        },
+      ],
+      stack: [
+        "Java 21", "Spring Boot", "Spring Security", "JPA", "PostgreSQL", "Python", "Flask",
+        "React", "Next.js", "TypeScript", "Tailwind CSS", "Zustand", "ApexCharts", "AWS", "Docker", "nginx", "GitHub Actions", "FCM",
+      ],
+      sortOrder: 1,
+    },
+    {
+      company: "상상스토리(주)",
+      position: "연구소 · 주임",
+      role: "웹개발",
+      period: "2022.05 ~ 2024.04",
+      region: "서울",
+      resignReason: "학업",
+      summary: "Spring 기반 웹 시스템 3건 개발·운영 (포털, LMS, 시설물 관리)",
+      projects: [
+        {
+          title: "사내 포털 및 접근권한 관리 시스템 개발",
+          period: "2022.05 ~ 2023.08",
+          details: [
+            "eGovFramework 기반 포털 시스템 신규 구축",
+            "Spring Security 활용 RBAC 기반 권한 관리 및 인증 시스템 설계·구현",
+            "시큐어 코딩 가이드 적용 및 보안 강화",
+            "Docker 기반 사내 서버 운영 환경 구축 및 최적화",
+          ],
+        },
+        {
+          title: "LMS 및 시설물 관리 시스템 고도화",
+          period: "2023.08 ~ 2024.04",
+          details: [
+            "법무부 솔로몬로 포탈, LMS, 시설물 관리 시스템 개발 및 성능 최적화",
+            "웹 접근성 WAX Scanner 70 → 90점 개선 (KWCAG 인증 획득)",
+            "SQL Injection, XSS 등 보안 취약점 60건 전수 점검·개선",
+            "N+1 문제 해결을 위한 쿼리 튜닝",
+            "RESTful API 설계 및 로그/통계 대시보드 구현",
+            "서버 관리 자동화 및 장애 대응 프로세스 체계화",
+          ],
+        },
+      ],
+      stack: [
+        "Java", "Spring Framework", "Spring Boot", "Spring Security", "eGovFramework", "MyBatis",
+        "Oracle", "MySQL", "JavaScript", "JSP", "jQuery", "Linux(CentOS)", "Docker",
+      ],
+      sortOrder: 2,
+    },
+  ],
+  educations: [
+    {
+      school: "국가평생교육진흥원 (4년제)",
+      department: "정보통신학과",
+      period: "2022.05 ~ 2024.02",
+      status: "편입/졸업",
+      region: "서울",
+      gpa: "3.75 / 4.5",
+      sortOrder: 1,
+    },
+    {
+      school: "부천대학교 (2·3년제)",
+      department: "정보통신학과",
+      period: "2019.03 ~ 2021.02",
+      status: "졸업",
+      region: "경기",
+      gpa: "3.49 / 4.5",
+      projects: [
+        "스마트멀티탭 - IoT 기반 에너지 절약 솔루션 개발 및 안드로이드 앱 연동",
+        "대중교통 통합 예약 어플 - 좌석 예약·취소·결제 기능 통합",
+        "숨겨진 명소 알리기 사이트 - 명소 등록/파일 업로드 공유형 웹사이트",
+        "농구팀 사이트 - 팀 소개, 공지사항, 질문 기능 + 관리자 페이지",
+      ],
+      sortOrder: 2,
+    },
+  ],
+  trainings: [
+    {
+      org: "커널아카데미",
+      course: "AI 융합 백엔드 개발 부트캠프",
+      period: "2025.06 ~ 2025.12",
+      learned: [
+        "Java 21", "Oracle", "MySQL", "JSP", "HTML5", "CSS3", "JavaScript", "jQuery", "React",
+        "Spring Boot", "AI API", "TypeScript", "JPA", "PostgreSQL",
+      ],
+      sortOrder: 1,
+    },
+    {
+      org: "중앙 HTA",
+      course: "웹 콘텐츠 개발을 위한 응용SW엔지니어링 양성과정",
+      period: "2021.07 ~ 2022.01",
+      learned: ["Java", "Oracle", "JSP", "HTML5", "CSS3", "JavaScript", "jQuery", "Spring"],
+      sortOrder: 2,
+    },
+  ],
+  certifications: [
+    { name: "정보처리기사", issuer: "한국산업인력공단", acquiredAt: "2023.06" },
+    { name: "SQLD (SQL 개발자)", issuer: "한국데이터베이스진흥센터", acquiredAt: "2024.04" },
+    { name: "네트워크관리사 2급", issuer: "한국정보통신자격협회", acquiredAt: "2023.10" },
+    { name: "정보처리산업기사", issuer: "한국산업인력공단", acquiredAt: "2021.08" },
+  ],
+  skills: {
+    language: [
+      { name: "Java", level: "상" },
+      { name: "Python", level: "중" },
+      { name: "TypeScript", level: "중" },
+      { name: "JavaScript", level: "중" },
+    ],
+    framework: [
+      { name: "Spring Boot", level: "상" },
+      { name: "Spring Framework", level: "상" },
+      { name: "Spring Security", level: "상" },
+      { name: "JPA", level: "상" },
+      { name: "MyBatis", level: "중" },
+      { name: "Flask", level: "중" },
+      { name: "React", level: "중" },
+      { name: "Next.js", level: "중" },
+      { name: "Tailwind CSS", level: "중" },
+      { name: "eGovFramework", level: "중" },
+      { name: "JSP / jQuery", level: "중" },
+    ],
+    database: [
+      { name: "PostgreSQL", level: "상" },
+      { name: "Oracle", level: "중" },
+      { name: "MySQL", level: "중" },
+    ],
+    infra: [
+      { name: "GitHub Actions (CI/CD)", level: "상" },
+      { name: "AWS (EC2·RDS·S3·SSM)", level: "중" },
+      { name: "Docker", level: "중" },
+      { name: "nginx", level: "중" },
+      { name: "Linux", level: "중" },
+      { name: "Git", level: "중" },
+    ],
+  },
+  portfolios: [
+    { title: "GOTCHA Frontend", url: "https://github.com/fcde-project9/GOTCHA-FE", period: "2026.01.05 ~ 2026.03.02" },
+    { title: "GOTCHA Backend", url: "https://github.com/fcde-project9/GOTCHA-BE", period: "2026.01.05 ~ 2026.03.02" },
+    { title: "AI Auto Posting Backend", url: "https://github.com/WONJUN-KR/AI-Auto-Posting-Backend", period: "2025.11.17 ~ 2025.12.26" },
+    { title: "AI Auto Posting Frontend", url: "https://github.com/WONJUN-KR/AI-Auto-Posting-Frontend", period: "2025.11.17 ~ 2025.12.26" },
+    { title: "Co's House (5인 팀)", url: "https://github.com/WONJUN-KR/Co-s_House", period: "2025.09.08 ~ 2025.10.10", teamSize: 5 },
+  ],
+  military: { status: "군필", type: "사회복무요원 (이병 소집해제)", period: "2022.05 ~ 2024.04" },
+  coverLetter: `## 데이터를 잃지 않고, 멈추지 않는 서비스를 만드는 풀스택 개발자
+
+연속혈당측정 의료기기 회사에서 웹 서비스와 사내 데이터 플랫폼을 맡고 있는 3년 차 풀스택 개발자입니다. 입사 후 여섯 개 프로젝트를 동시에 맡아, 기능 개발부터 인프라와 배포까지 직접 책임져 왔습니다.
+
+화면도 직접 만듭니다. React로 관리자 콘솔을, Next.js로 IoT 기기 웹뷰와 대리점 관리자 페이지를 처음부터 구축했고, 웹뷰와 Android 앱을 잇는 브릿지와 4개 국어 지원까지 맡았습니다. 서버 시간 처리를 UTC로 바꿀 때는 jest 골든 테스트로 한국 사용자 화면이 바뀌지 않았음을 확인한 뒤 배포했습니다.
+
+가장 크게 바꾼 것은 배포 방식입니다. 수동 파일 복사로 배포하던 환경에 회사의 첫 CI/CD를 도입했고, 테스트 게이트와 자동 롤백, blue/green 무중단 배포를 붙였습니다. 온프레미스 서비스 두 개를 AWS로 이전하며 34만 행을 전수 대조해 데이터 유실 없이 약 2.5분 만에 전환했습니다.
+
+레거시 플랫폼도 안전하게 바꿨습니다. git이 없던 사내 분석 플랫폼에 형상관리를 도입하고, 89개 라우트에 접근제어와 SQL 파라미터 바인딩을 적용했습니다. 테스트를 0개에서 211개로 늘리고 골든 마스터 테스트로 화면 결과가 같은지 확인하며 리팩터링했습니다.
+
+일하는 원칙은 '추측하지 않고 실측한다'입니다. 혈당 그래프가 주기적으로 비는 문제가 온도 탓으로 의심됐을 때, 빈 구간 31개가 측정 펄스와 정확히 겹친다는 것을 데이터로 확인해 진짜 원인인 전처리 필터를 고쳤고, 앱 결과와의 일치율을 약 40%에서 100%로 올렸습니다. 운영 데이터를 바꿀 때는 백업과 드라이런, 전수 대조를 먼저 합니다.
+
+이전 회사 상상스토리에서는 전자정부프레임워크 기반 사내 포털을 신규 구축하며 Spring Security RBAC를 설계했고, 법무부 솔로몬로 포탈·LMS·시설물 관리 시스템에서 웹 접근성 70→90점(KWCAG 인증)과 보안 취약점 60건을 개선했습니다. 그 뒤 AI 융합 백엔드 부트캠프와 GOTCHA 프로젝트로 Java 21·Spring Boot 3·React 스택을 익혔고, 지금은 그 스택으로 의료 서비스를 운영하고 있습니다.
+
+레거시를 안전하게 바꾸는 일과, 데이터를 잃지 않는 운영을 가장 자신 있게 해낼 수 있는 개발자입니다.`,
+};
