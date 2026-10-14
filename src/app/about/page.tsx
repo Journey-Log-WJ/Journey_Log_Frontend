@@ -5,7 +5,7 @@ import { getAbout } from "@/lib/api";
 import { GithubIcon } from "@/components/icons";
 import { Chip, Eyebrow } from "@/components/ui";
 
-// 숙련도 표시 — 상은 포인트, 중은 기본, 하는 흐리게
+// 숙련도 표시 - 상은 포인트, 중은 기본, 하는 흐리게
 const LEVEL_STYLE: Record<string, string> = {
   상: "border-accent/40 bg-accent-soft text-foreground",
   중: "border-line bg-surface text-foreground",
@@ -195,7 +195,7 @@ export default async function AboutPage() {
         <Section eyebrow="Etc" title="취업 우대사항">
           <div className="rounded-2xl border border-line bg-surface p-5 text-sm">
             <span className="font-semibold">병역 · {military.status}</span>
-            <span className="text-muted"> — {military.type} ({military.period})</span>
+            <span className="text-muted"> - {military.type} ({military.period})</span>
           </div>
         </Section>
       )}

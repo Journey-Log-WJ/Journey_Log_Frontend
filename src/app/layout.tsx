@@ -22,7 +22,7 @@ const NAV_ITEMS = [
 
 export const metadata: Metadata = {
   title: "저니로그",
-  description: "원준의 살아있는 이력서 — 과거·현재·미래의 기록",
+  description: "원준의 살아있는 이력서 - 과거·현재·미래의 기록",
 };
 
 export default function RootLayout({
@@ -35,8 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans">
         <header className="sticky top-0 z-40 border-b border-line bg-background/70 backdrop-blur-xl">
           <nav className="max-w-5xl mx-auto flex items-center justify-between px-6 h-14">
-            <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-              <span className="size-2 rounded-full bg-accent" />
+            <Link href="/" className="font-semibold tracking-tight">
               JourneyLog
             </Link>
             <div className="flex items-center gap-1 text-sm text-muted">

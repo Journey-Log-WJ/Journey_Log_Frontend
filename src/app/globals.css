@@ -2,7 +2,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* 제목용 폰트 — 페이퍼로지 (눈누, OFL·웹 임베딩 허용). 쓰는 굵기만 로드 */
+/* 제목용 폰트 - 페이퍼로지 (눈누, OFL·웹 임베딩 허용). 쓰는 굵기만 로드 */
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
 @font-face {
   font-family: "Paperozi";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2") format("woff2");
@@ -28,7 +34,7 @@
   font-display: swap;
 }
 
-/* 사이트는 다크 단일 테마 — html.dark 고정이라 dark: 유틸리티가 항상 적용됨 */
+/* 사이트는 다크 단일 테마 - html.dark 고정이라 dark: 유틸리티가 항상 적용됨 */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* 에스프레소 브라운 팔레트 (주황기 뺀 모던 브라운). 색 값은 여기서만 정의 */
@@ -38,19 +44,26 @@
   --color-espresso-700: #43362e;
   --color-espresso-300: #b9aa9c;
   --color-cream: #f5efe8;
-  /* 포인트 — 벽돌 레드 + 모던 브라운(모카·라떼) */
+  /* 포인트 - 벽돌 레드 + 모던 브라운(모카·라떼) */
   --color-brick: #d0604c;
   --color-brick-deep: #b04e3c;
   --color-mocha: #a47864;
   --color-latte: #c9a88f;
-  /* 잔디 — 깊고 진한 포레스트 그린 */
+  /* 잔디 - 깊고 진한 포레스트 그린 */
   --color-forest-900: #23402d;
   --color-forest-700: #2f5e3d;
   --color-forest-500: #3f7f50;
   --color-forest-300: #5fa36d;
+  /* 글자 크기 - 페이퍼로지 본문이 잘 읽히는 17px 기준 (기본 12/14/16 → 15/17/17) */
+  --text-xs: 0.9375rem;
+  --text-xs--line-height: calc(1.4 / 0.9375);
+  --text-sm: 1.0625rem;
+  --text-sm--line-height: calc(1.6 / 1.0625);
+  --text-base: 1.0625rem;
+  --text-base--line-height: calc(1.75 / 1.0625);
 }
 
-/* 디자인 토큰 — 컴포넌트는 이 이름만 씀 */
+/* 디자인 토큰 - 컴포넌트는 이 이름만 씀 */
 :root {
   color-scheme: dark;
   --background: var(--color-espresso-900);
@@ -64,7 +77,7 @@
   --accent-strong: var(--color-brick-deep);
   --accent-soft: color-mix(in oklab, var(--color-brick) 16%, transparent);
   --accent-2: var(--color-latte);
-  /* 잔디 5단계 — 포레스트 그린. 빈 칸은 배경에 묻히는 에스프레소 */
+  /* 잔디 5단계 - 포레스트 그린. 빈 칸은 배경에 묻히는 에스프레소 */
   --heat-0: var(--color-espresso-700);
   --heat-1: var(--color-forest-900);
   --heat-2: var(--color-forest-700);
@@ -88,12 +101,12 @@
   --color-heat-2: var(--heat-2);
   --color-heat-3: var(--heat-3);
   --color-heat-4: var(--heat-4);
-  --font-sans: "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: "Paperozi", "Pretendard Variable", Pretendard, var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-display: "Paperozi", "Pretendard Variable", Pretendard, system-ui, sans-serif;
 }
 
-/* 제목은 페이퍼로지, 본문은 프리텐다드 */
+/* 제목·본문 모두 페이퍼로지 (본문은 400, 한글 글리프 없으면 프리텐다드로 대체) */
 @layer base {
   h1,
   h2,
@@ -118,7 +131,7 @@
 }
 
 body {
-  /* 위쪽에 은은한 조명 + 코냑 빛 번짐 — 단색 평면 느낌 줄이기 */
+  /* 위쪽에 은은한 조명 + 코냑 빛 번짐 - 단색 평면 느낌 줄이기 */
   background:
     radial-gradient(900px 500px at 15% -5%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%),
     radial-gradient(1100px 600px at 90% 0%, color-mix(in oklab, var(--color-white) 7%, transparent), transparent 70%),

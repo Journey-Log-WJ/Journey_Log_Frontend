@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Tag } from "@/lib/api";
 
-// 페이지 공용 UI 조각 — 색은 globals.css 토큰만 사용
+// 페이지 공용 UI 조각 - 색은 globals.css 토큰만 사용
 
 export function BackLink({ href, label }: { href: string; label: string }) {
   return (
