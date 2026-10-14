@@ -13,6 +13,7 @@ import {
   getPosts,
   type AboutContent,
 } from "@/lib/api";
+import { groupSkillsByKind } from "@/lib/about";
 import { PROJECTS } from "@/lib/projects";
 
 const EARLIEST_YEAR = 2020;
@@ -25,10 +26,9 @@ const COMPANY_LOGOS: Record<string, string> = {
 };
 
 const SKILL_GROUPS: { key: string; label: string }[] = [
-  { key: "language", label: "Language" },
-  { key: "framework", label: "Framework" },
-  { key: "database", label: "Database" },
-  { key: "infra", label: "Infra" },
+  { key: "backend", label: "Backend" },
+  { key: "frontend", label: "Frontend" },
+  { key: "infra", label: "DevOps" },
 ];
 
 const GITHUB_WORK = "WonJun-Uxn";
@@ -144,16 +144,22 @@ export default async function HomeView({ year, about }: { year?: string; about: 
       {/* Tech stack */}
       {about?.skills && (
         <section className="animate-fade-up [animation-delay:200ms] flex flex-col gap-8">
-          <SectionHeader eyebrow="Tech Stack" title="다루는 기술" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+          <SectionHeader eyebrow="Skills" title="역량" />
+          {/* 분야를 위에서 아래로 쌓고, 분야 안에서는 세부 묶음을 한 줄씩 (이름 | 칩) */}
+          <div className="flex flex-col gap-8">
             {SKILL_GROUPS.filter((g) => about.skills[g.key]?.length).map((g) => (
               <div key={g.key} className="flex flex-col gap-3">
                 <span className="text-sm font-semibold">{g.label}</span>
-                <div className="flex flex-wrap gap-2">
-                  {about.skills[g.key].map((s) => (
-                    <Chip key={s.name}>{s.name}</Chip>
-                  ))}
-                </div>
+                {groupSkillsByKind(about.skills[g.key]).map((k) => (
+                  <div key={k.kind ?? "all"} className="grid grid-cols-1 sm:grid-cols-[110px_1fr] items-start gap-x-4 gap-y-1.5">
+                    {k.kind ? <span className="pt-1 text-xs text-muted">{k.kind}</span> : <span className="hidden sm:block" />}
+                    <div className="flex flex-wrap gap-2">
+                      {k.items.map((s) => (
+                        <Chip key={s.name}>{s.name}</Chip>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -162,7 +168,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
 
       {/* Projects - 벤토 그리드: 첫 카드는 크게 */}
       <section className="flex flex-col gap-8">
-        <SectionHeader eyebrow="Projects" title="만든 것들" href="/projects" linkLabel="전체 보기" />
+        <SectionHeader eyebrow="Projects" title="포트폴리오" href="/projects" linkLabel="전체 보기" />
         <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
           {featured.map((p, i) => {
             const isHero = i === 0;
@@ -280,7 +286,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
 
       {/* Activity - 글 + 잔디 */}
       <section className="flex flex-col gap-8">
-        <SectionHeader eyebrow="Activity" title="기록하고 꾸준히" href="/log" linkLabel="모든 글" />
+        <SectionHeader eyebrow="Activity" title="기록" href="/log" linkLabel="모든 글" />
         {latestPosts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {latestPosts.map((post) => (
