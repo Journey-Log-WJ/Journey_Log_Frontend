@@ -38,7 +38,7 @@ export default function RootLayout({
             <Link href="/" className="font-semibold tracking-tight">
               JourneyLog
             </Link>
-            <div className="flex items-center gap-1 text-sm text-muted">
+            <div className="flex items-center gap-1 text-sm font-semibold text-accent-2">
               {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.href}
