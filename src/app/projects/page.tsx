@@ -71,7 +71,7 @@ function ProjectVisual({ project }: { project: Project }) {
   return (
     <Frame>
       <div className="flex flex-col items-center gap-2 text-muted">
-        <span className="font-mono text-xs uppercase tracking-widest">preview</span>
+        <span className="tabular-nums text-xs uppercase tracking-widest">preview</span>
         <span className="text-2xl font-semibold tracking-tight text-center px-4">{project.title}</span>
       </div>
     </Frame>
@@ -106,7 +106,7 @@ export default function ProjectsPage() {
                       LIVE
                     </span>
                   )}
-                  <span className="font-mono">{p.period}</span>
+                  <span className="tabular-nums">{p.period}</span>
                   <span>·</span>
                   <span>{p.role}</span>
                 </div>

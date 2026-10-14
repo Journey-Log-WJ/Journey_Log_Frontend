@@ -46,14 +46,14 @@ export default function SeriesPostList({ posts }: { posts: SeriesPostItem[] }) {
               href={`/log/${post.slug}`}
               className="group flex gap-5 rounded-3xl border border-line bg-surface p-6 transition-all hover:-translate-y-0.5 hover:border-accent/40"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft font-mono text-sm font-bold text-accent-2">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft tabular-nums text-sm font-bold text-accent-2">
                 {post.seriesIndex ?? "·"}
               </span>
               <div className="flex flex-col gap-2 min-w-0">
                 <h2 className="text-lg font-bold tracking-tight group-hover:text-accent-2 transition-colors">{post.title}</h2>
                 {post.excerpt && <p className="text-sm text-muted line-clamp-2">{post.excerpt}</p>}
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <time className="text-xs font-mono text-muted">{formatDate(post.publishedAt)}</time>
+                  <time className="text-xs tabular-nums text-muted">{formatDate(post.publishedAt)}</time>
                   <TagList tags={post.tags} />
                 </div>
               </div>

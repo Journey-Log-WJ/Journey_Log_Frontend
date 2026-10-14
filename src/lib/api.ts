@@ -104,23 +104,7 @@ export type RoadmapItem = {
   sortOrder: number;
 };
 
-export async function getRoadmaps(): Promise<RoadmapItem[]> {
-  return fetchJson<RoadmapItem[]>("/api/roadmaps");
-}
-
-export async function getRoadmap(slug: string): Promise<RoadmapItem | null> {
-  let decoded = slug;
-  try {
-    decoded = decodeURIComponent(slug);
-  } catch {
-    // slug already decoded
-  }
-  const url = `${API_BASE}/api/roadmaps/${encodeURIComponent(decoded)}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
-  return res.json() as Promise<RoadmapItem>;
-}
+// 연혁(History) 데이터는 src/lib/history.ts 하드코딩 (백엔드 /api/roadmaps 는 더 이상 안 씀)
 
 export type ContributionDay = {
   date: string;

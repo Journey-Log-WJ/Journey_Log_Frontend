@@ -17,7 +17,7 @@ const NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/projects", label: "Projects" },
   { href: "/log", label: "Log" },
-  { href: "/roadmap", label: "Roadmap" },
+  { href: "/history", label: "History" },
 ];
 
 export const metadata: Metadata = {

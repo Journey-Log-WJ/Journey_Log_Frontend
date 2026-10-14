@@ -236,7 +236,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                           {[c.role, c.position].filter(Boolean).join(" · ")}
                         </span>
                       </div>
-                      <span className="text-sm font-mono text-muted shrink-0">
+                      <span className="text-sm tabular-nums text-muted shrink-0">
                         {c.period}
                       </span>
                     </div>
@@ -249,7 +249,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
                             <span className="font-semibold text-sm sm:text-base">{proj.title}</span>
                             <span className="flex items-center gap-3 shrink-0">
-                              <span className="hidden sm:inline text-xs font-mono text-muted">{proj.period}</span>
+                              <span className="hidden sm:inline text-xs tabular-nums text-muted">{proj.period}</span>
                               <ArrowRight className="size-4 text-muted transition-transform group-open:rotate-90" />
                             </span>
                           </summary>
@@ -289,7 +289,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                 href={`/log/${encodeURIComponent(post.slug)}`}
                 className="group flex flex-col gap-3 rounded-3xl border border-line bg-surface p-6 transition-all hover:-translate-y-1 hover:border-accent/40"
               >
-                <span className="text-xs font-mono text-muted">{post.publishedAt?.slice(0, 10) ?? ""}</span>
+                <span className="text-xs tabular-nums text-muted">{post.publishedAt?.slice(0, 10) ?? ""}</span>
                 <h3 className="font-bold tracking-tight leading-snug line-clamp-2 group-hover:text-accent-2 transition-colors">
                   {post.title}
                 </h3>

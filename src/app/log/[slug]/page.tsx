@@ -19,7 +19,7 @@ export default async function PostPage({ params }: PageProps) {
       <BackLink href="/log" label="기록으로" />
 
       <header className="animate-fade-up flex flex-col gap-4 border-b border-line pb-8">
-        <time className="text-sm font-mono text-muted">{formatDate(post.publishedAt)}</time>
+        <time className="text-sm tabular-nums text-muted">{formatDate(post.publishedAt)}</time>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">{post.title}</h1>
         <TagList tags={post.tags} />
       </header>

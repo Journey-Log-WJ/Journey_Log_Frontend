@@ -118,7 +118,7 @@ export default function AboutView({ about }: { about: AboutContent }) {
                     <div key={pi} className="rounded-2xl border border-line bg-background p-5 flex flex-col gap-2">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                         <h4 className="font-semibold">{p.title}</h4>
-                        <span className="text-xs font-mono text-muted">{p.period}</span>
+                        <span className="text-xs tabular-nums text-muted">{p.period}</span>
                       </div>
                       <BulletList items={p.details} />
                     </div>
@@ -278,7 +278,7 @@ function TimelineItem({ period, current, children }: {
           current ? "bg-accent" : "bg-muted"
         }`}
       />
-      <span className="text-xs font-mono text-muted">{period}</span>
+      <span className="text-xs tabular-nums text-muted">{period}</span>
       {children}
     </li>
   );
