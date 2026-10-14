@@ -201,7 +201,7 @@ export default async function RoadmapPage() {
                       {item.period && (
                         <span className="text-xs text-zinc-500 tabular-nums">{item.period}</span>
                       )}
-                      <h3 className="font-medium tracking-tight group-hover:underline">
+                      <h3 className="font-medium tracking-tight underline-draw">
                         {item.title}
                       </h3>
                       <span className={`text-xs px-1.5 py-0.5 rounded ${color.badge}`}>
