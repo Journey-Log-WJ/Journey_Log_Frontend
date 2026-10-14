@@ -1,4 +1,4 @@
-import type { AboutContent, CareerItem } from "@/lib/api";
+import type { AboutContent, CareerItem, SkillItem } from "@/lib/api";
 
 // "2022.05 ~ 2024.04" / "2026.03 ~ 재직중" → 시작·끝 달 포함 개월 수 (잡사이트와 같은 셈법)
 function careerMonths(period: string, now: Date): number {
@@ -15,6 +15,17 @@ export function totalCareerPeriod(careers: CareerItem[], now = new Date()): stri
   const years = Math.floor(total / 12);
   const months = total % 12;
   return [years && `${years}년`, months && `${months}개월`].filter(Boolean).join(" ") || "0개월";
+}
+
+// 스킬을 kind 별로 묶음 (처음 나온 순서 유지, kind 없으면 한 덩어리)
+export function groupSkillsByKind(items: SkillItem[]): { kind?: string; items: SkillItem[] }[] {
+  const groups: { kind?: string; items: SkillItem[] }[] = [];
+  for (const s of items) {
+    const g = groups.find((x) => x.kind === s.kind);
+    if (g) g.items.push(s);
+    else groups.push({ kind: s.kind, items: [s] });
+  }
+  return groups;
 }
 
 // 이력서 데이터 - 홈(/)과 About(/about)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
@@ -213,38 +224,41 @@ export const ABOUT: AboutContent = {
     { name: "네트워크관리사 2급", issuer: "한국정보통신자격협회", acquiredAt: "2023.10" },
     { name: "정보처리산업기사", issuer: "한국산업인력공단", acquiredAt: "2021.08" },
   ],
+  // 키 순서대로 그려짐: 백엔드 → 프론트엔드 → DevOps. 분야 안에서는 kind(언어·프레임워크·라이브러리·데이터베이스) 순서대로 묶음
   skills: {
-    language: [
-      { name: "Java", level: "상" },
-      { name: "Python", level: "중" },
-      { name: "TypeScript", level: "중" },
-      { name: "JavaScript", level: "중" },
+    backend: [
+      { name: "Java", level: "상", kind: "언어" },
+      { name: "Python", level: "중", kind: "언어" },
+      { name: "Spring Boot", level: "상", kind: "프레임워크" },
+      { name: "Spring Framework", level: "상", kind: "프레임워크" },
+      { name: "Flask", level: "중", kind: "프레임워크" },
+      { name: "eGovFramework", level: "중", kind: "프레임워크" },
+      { name: "Spring Security", level: "상", kind: "라이브러리" },
+      { name: "JPA", level: "상", kind: "라이브러리" },
+      { name: "MyBatis", level: "중", kind: "라이브러리" },
+      { name: "JSP", level: "중", kind: "라이브러리" },
+      { name: "PostgreSQL", level: "상", kind: "데이터베이스" },
+      { name: "Oracle", level: "중", kind: "데이터베이스" },
+      { name: "MySQL", level: "중", kind: "데이터베이스" },
     ],
-    framework: [
-      { name: "Spring Boot", level: "상" },
-      { name: "Spring Framework", level: "상" },
-      { name: "Spring Security", level: "상" },
-      { name: "JPA", level: "상" },
-      { name: "MyBatis", level: "중" },
-      { name: "Flask", level: "중" },
-      { name: "React", level: "중" },
-      { name: "Next.js", level: "중" },
-      { name: "Tailwind CSS", level: "중" },
-      { name: "eGovFramework", level: "중" },
-      { name: "JSP / jQuery", level: "중" },
-    ],
-    database: [
-      { name: "PostgreSQL", level: "상" },
-      { name: "Oracle", level: "중" },
-      { name: "MySQL", level: "중" },
+    frontend: [
+      { name: "TypeScript", level: "중", kind: "언어" },
+      { name: "JavaScript", level: "중", kind: "언어" },
+      { name: "Next.js", level: "중", kind: "프레임워크" },
+      { name: "React", level: "중", kind: "라이브러리" },
+      { name: "Tailwind CSS", level: "중", kind: "라이브러리" },
+      { name: "Zustand", level: "중", kind: "라이브러리" },
+      { name: "jQuery", level: "중", kind: "라이브러리" },
     ],
     infra: [
-      { name: "GitHub Actions (CI/CD)", level: "상" },
-      { name: "AWS (EC2·RDS·S3·SSM)", level: "중" },
-      { name: "Docker", level: "중" },
-      { name: "nginx", level: "중" },
-      { name: "Linux", level: "중" },
-      { name: "Git", level: "중" },
+      { name: "AWS (EC2·RDS·S3·SSM)", level: "중", kind: "클라우드·서버" },
+      { name: "Linux", level: "중", kind: "클라우드·서버" },
+      { name: "systemd", level: "중", kind: "클라우드·서버" },
+      { name: "nginx", level: "중", kind: "웹 서버" },
+      { name: "Caddy", level: "중", kind: "웹 서버" },
+      { name: "GitHub Actions", level: "상", kind: "CI/CD·배포" },
+      { name: "Docker", level: "중", kind: "CI/CD·배포" },
+      { name: "Git", level: "중", kind: "CI/CD·배포" },
     ],
   },
   portfolios: [

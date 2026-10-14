@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { BookOpen, ExternalLink, Mail, MapPin, Rss } from "lucide-react";
 import type { AboutContent } from "@/lib/api";
+import { groupSkillsByKind } from "@/lib/about";
 import { GithubIcon } from "@/components/icons";
 import { Chip, Eyebrow } from "@/components/ui";
 
@@ -13,10 +14,9 @@ const LEVEL_STYLE: Record<string, string> = {
 };
 
 const CATEGORY_LABEL: Record<string, string> = {
-  language: "Language",
-  framework: "Framework / Library",
-  database: "Database",
-  infra: "Infra / Tool",
+  backend: "Backend",
+  frontend: "Frontend",
+  infra: "DevOps",
 };
 
 // about 페이지 본문 - 데이터는 src/lib/about.ts
@@ -81,23 +81,29 @@ export default function AboutView({ about }: { about: AboutContent }) {
       </Section>
 
       <Section eyebrow="Skills" title="나의 스킬">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+        {/* 분야를 위에서 아래로 쌓고, 분야 안에서는 세부 묶음을 한 줄씩 (이름 | 칩) */}
+        <div className="flex flex-col gap-8">
           {Object.entries(skills).map(([category, items]) => (
             <div key={category} className="flex flex-col gap-3">
               <h3 className="text-sm font-semibold">{CATEGORY_LABEL[category] ?? category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {items.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs ${
-                      LEVEL_STYLE[skill.level ?? "중"]
-                    }`}
-                  >
-                    {skill.name}
-                    {skill.level && <span className="text-[10px] font-semibold text-accent-2">{skill.level}</span>}
-                  </span>
-                ))}
-              </div>
+              {groupSkillsByKind(items).map((g) => (
+                <div key={g.kind ?? "all"} className="grid grid-cols-1 sm:grid-cols-[110px_1fr] items-start gap-x-4 gap-y-1.5">
+                  {g.kind ? <span className="pt-1 text-xs text-muted">{g.kind}</span> : <span className="hidden sm:block" />}
+                  <div className="flex flex-wrap gap-2">
+                    {g.items.map((skill) => (
+                      <span
+                        key={skill.name}
+                        className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs ${
+                          LEVEL_STYLE[skill.level ?? "중"]
+                        }`}
+                      >
+                        {skill.name}
+                        {skill.level && <span className="text-[10px] font-semibold text-accent-2">{skill.level}</span>}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>
