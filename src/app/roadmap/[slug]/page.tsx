@@ -4,12 +4,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getRoadmap, type RoadmapStatus } from "@/lib/api";
 
-const STATUS_LABEL: Record<RoadmapStatus, string> = {
+// 배지는 진행·계획만 표시 (목록 페이지와 같은 규칙)
+const STATUS_LABEL: Partial<Record<RoadmapStatus, string>> = {
   PLANNED: "계획",
   IN_PROGRESS: "진행",
-  SUCCEEDED: "성공",
-  FAILED: "실패",
-  LEARNED: "경험",
 };
 
 const STATUS_BADGE: Record<RoadmapStatus, string> = {
@@ -37,9 +35,11 @@ export default async function RoadmapDetailPage({ params }: PageProps) {
 
       <header className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span className={`px-2 py-0.5 rounded ${STATUS_BADGE[item.status]}`}>
-            {STATUS_LABEL[item.status]}
-          </span>
+          {STATUS_LABEL[item.status] && (
+            <span className={`px-2 py-0.5 rounded ${STATUS_BADGE[item.status]}`}>
+              {STATUS_LABEL[item.status]}
+            </span>
+          )}
           {item.period && <span className="text-zinc-500">{item.period}</span>}
         </div>
         <h1 className="text-3xl font-semibold tracking-tight">{item.title}</h1>

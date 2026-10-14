@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { getRoadmaps, type RoadmapItem, type RoadmapStatus } from "@/lib/api";
 
-const STATUS_LABEL: Record<RoadmapStatus, string> = {
+// 배지는 진행·계획만 표시 (성공·실패·경험은 핀 색으로만 구분)
+const STATUS_LABEL: Partial<Record<RoadmapStatus, string>> = {
   PLANNED: "계획",
   IN_PROGRESS: "진행",
-  SUCCEEDED: "성공",
-  FAILED: "실패",
-  LEARNED: "경험",
 };
 
 const STATUS_COLOR: Record<RoadmapStatus, { pin: string; badge: string }> = {
@@ -78,7 +76,6 @@ export default async function RoadmapPage() {
     <div className="flex flex-col gap-10">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">roadmap</h1>
-        <p className="text-sm text-zinc-500">부천대부터 지금까지 - 실패했지만 넘어간 것, 성공했지만 남은 생각</p>
       </header>
 
       {N === 0 ? (
@@ -204,9 +201,11 @@ export default async function RoadmapPage() {
                       <h3 className="font-medium tracking-tight underline-draw">
                         {item.title}
                       </h3>
-                      <span className={`text-xs px-1.5 py-0.5 rounded ${color.badge}`}>
-                        {STATUS_LABEL[item.status]}
-                      </span>
+                      {STATUS_LABEL[item.status] && (
+                        <span className={`text-xs px-1.5 py-0.5 rounded ${color.badge}`}>
+                          {STATUS_LABEL[item.status]}
+                        </span>
+                      )}
                     </div>
                     {item.description && (
                       <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
