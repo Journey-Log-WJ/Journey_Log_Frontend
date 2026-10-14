@@ -139,4 +139,6 @@ body {
   background-attachment: fixed;
   color: var(--foreground);
   word-break: keep-all;
+  /* 마지막 줄에 한두 단어만 남지 않게 - 윗줄을 꽉 채우고 아랫줄이 짧게 끝남 */
+  text-wrap: pretty;
 }

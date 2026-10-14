@@ -137,6 +137,16 @@ export async function getContributions(year?: string): Promise<ContributionsResp
   return fetchJson<ContributionsResponse>(`/api/contributions${q}`);
 }
 
+// GitHub 계정 하나의 가입 이후 전체 기여 합계 - 홈 숫자 카드용, 잔디(백엔드 합산)와 별개
+export async function getGithubContributionAllTime(username: string): Promise<number> {
+  const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=all`, {
+    next: { revalidate: 3600 },
+  });
+  if (!res.ok) throw new Error(`GitHub contributions for ${username} failed: ${res.status}`);
+  const body = (await res.json()) as { total?: Record<string, number> };
+  return Object.values(body.total ?? {}).reduce((sum, n) => sum + n, 0);
+}
+
 export type SkillLevel = "상" | "중" | "하";
 export type SkillItem = { name: string; level?: SkillLevel };
 
@@ -220,10 +230,3 @@ export type AboutContent = {
   military?: { status: string; type: string; period: string };
   coverLetter: string;
 };
-
-export async function getAbout(): Promise<AboutContent | null> {
-  const res = await fetch(`${API_BASE}/api/about`, { next: { revalidate: 60 } });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`API /api/about failed: ${res.status}`);
-  return res.json() as Promise<AboutContent>;
-}
