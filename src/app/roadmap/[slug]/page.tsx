@@ -31,7 +31,7 @@ export default async function RoadmapDetailPage({ params }: PageProps) {
 
   return (
     <article className="flex flex-col gap-8">
-      <Link href="/roadmap" className="text-sm text-zinc-500 hover:underline w-fit">
+      <Link href="/roadmap" className="text-sm text-zinc-500 underline-draw w-fit">
         ← roadmap
       </Link>
 

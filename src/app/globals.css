@@ -130,6 +130,21 @@
   }
 }
 
+/* 마우스를 올리면 왼쪽에서 오른쪽으로 그어지는 벽돌색 밑줄 - 링크 자신 또는 감싼 .group 에 hover */
+.underline-draw {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  padding-bottom: 2px;
+  transition: background-size 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.underline-draw:hover,
+.group:hover .underline-draw,
+.group:focus-visible .underline-draw {
+  background-size: 100% 2px;
+}
+
 body {
   /* 위쪽에 은은한 조명 + 코냑 빛 번짐 - 단색 평면 느낌 줄이기 */
   background:
