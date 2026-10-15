@@ -63,10 +63,6 @@ export default function AboutView({ about }: { about: AboutContent }) {
         <InfoBox label="포트폴리오" value={`총 ${portfolios.length}건`} />
       </section>
 
-      <Section eyebrow="Intro" title="간략 소개">
-        <p className="whitespace-pre-wrap leading-relaxed text-foreground/90">{profile.intro}</p>
-      </Section>
-
       <Section eyebrow="Cover Letter" title="자기소개서">
         <div className="rounded-3xl border border-line bg-surface p-6 sm:p-10">
           <div className="prose prose-invert max-w-none prose-headings:font-[family-name:var(--font-display)] prose-p:text-foreground/90 prose-li:text-foreground/90 prose-strong:text-foreground prose-a:text-accent-2">
