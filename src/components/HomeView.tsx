@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight, BookOpen, Building2, Mail } from "lucide-react";
+import { ArrowUpRight, BookOpen, Building2, ChevronDown, Mail } from "lucide-react";
 import ContributionsCalendar from "@/components/ContributionsCalendar";
 import YearSelector from "@/components/YearSelector";
 import { GithubIcon } from "@/components/icons";
@@ -256,7 +256,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                             <span className="font-semibold text-sm sm:text-base">{proj.title}</span>
                             <span className="flex items-center gap-3 shrink-0">
                               <span className="hidden sm:inline text-xs tabular-nums text-muted">{proj.period}</span>
-                              <ArrowRight className="size-4 text-muted transition-transform group-open:rotate-90" />
+                              <ChevronDown className="size-4 text-muted transition-transform group-open:rotate-180" />
                             </span>
                           </summary>
                           <ul className="flex flex-col gap-2 px-5 pb-5 text-sm text-muted">
