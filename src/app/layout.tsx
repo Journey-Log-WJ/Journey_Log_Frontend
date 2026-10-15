@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import NavLinks from "@/components/NavLinks";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,13 +13,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const NAV_ITEMS = [
-  { href: "/resume", label: "Resume" },
-  { href: "/projects", label: "Projects" },
-  { href: "/log", label: "Log" },
-  { href: "/history", label: "History" },
-];
 
 // 링크 미리보기 이미지 등 절대 주소의 기준 - 도메인 바꾸면 여기만 수정
 const SITE_URL = "https://wonjun-portfolio-kr.vercel.app";
@@ -50,17 +44,7 @@ export default function RootLayout({
             <Link href="/" className="font-semibold tracking-tight">
               WONJUN · PORTFOLIO
             </Link>
-            <div className="flex items-center gap-1 text-sm font-semibold text-accent-2">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="px-3 py-1.5 rounded-full hover:text-foreground hover:bg-surface-hover transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
+            <NavLinks />
           </nav>
         </header>
         <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-12">{children}</main>
