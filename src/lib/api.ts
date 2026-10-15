@@ -89,9 +89,11 @@ export type SeriesDetail = SeriesListItem & {
   posts: SeriesPostItem[];
 };
 
+// 최근 업데이트된 시리즈가 앞
 export async function getSeriesList(): Promise<SeriesListItem[]> {
   const list = await velogSeriesList();
-  return list.map((s) => ({
+  const sorted = [...list].sort((a, b) => (b.updated_at ?? "").localeCompare(a.updated_at ?? ""));
+  return sorted.map((s) => ({
     id: s.id,
     slug: s.url_slug,
     name: s.name,
