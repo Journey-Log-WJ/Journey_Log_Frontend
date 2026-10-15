@@ -63,18 +63,13 @@ export default async function HomeView({ year, about }: { year?: string; about: 
   return (
     <div className="flex flex-col gap-28 py-6">
       {/* Hero */}
-      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-10 pt-8">
+      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-10 pt-2">
         <div className="flex flex-col gap-6 min-w-0">
-          {profile?.isEmployed && (
-            <span className="self-start rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted">
-              재직중 · {profile.careerPeriod}
-            </span>
-          )}
           <div className="flex flex-col gap-3">
-            <p className="text-lg text-muted">안녕하세요, {profile?.name ?? "WonJun"}입니다.</p>
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.15] bg-gradient-to-br from-foreground via-foreground to-accent-2 bg-clip-text text-transparent">
               {profile?.tagline ?? "풀스택 개발자"}
             </h1>
+            <p className="text-lg text-muted">안녕하세요, {profile?.name ?? "WonJun"}입니다.</p>
           </div>
           {profile?.intro && (
             <p className="text-base sm:text-lg leading-relaxed text-muted whitespace-pre-line">
