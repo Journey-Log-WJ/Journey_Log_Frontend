@@ -323,7 +323,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
         </div>
       </section>
 
-      <footer className="text-center text-sm text-muted pb-4">
+      <footer className="text-center text-xs text-muted pb-4">
         © {new Date().getFullYear()} WonJun. All rights reserved.
       </footer>
     </div>
