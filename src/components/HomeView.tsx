@@ -241,7 +241,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                   <div className="flex items-center gap-2 text-xs text-muted">
                     <span>{p.period}</span>
                     {p.status === "live" && (
-                      <span className="rounded-full bg-accent-soft text-accent-2 px-2 py-0.5 font-semibold">LIVE</span>
+                      <span className="rounded-full bg-accent-soft text-accent-2 px-2 py-0.5 font-semibold">운영 중</span>
                     )}
                   </div>
                   <div className="flex items-start justify-between gap-3">

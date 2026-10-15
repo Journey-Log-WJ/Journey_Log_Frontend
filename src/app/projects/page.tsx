@@ -5,15 +5,16 @@ import { PROJECTS, type Project } from "@/lib/projects";
 import { GithubIcon } from "@/components/icons";
 import { Chip, PageHeader } from "@/components/ui";
 
-export const metadata: Metadata = { title: "프로젝트" };
+export const metadata: Metadata = { title: "포트폴리오" };
 
 function BrowserFrame({ children, fixedAspect = true }: { children: React.ReactNode; fixedAspect?: boolean }) {
   return (
     <div className="w-full rounded-2xl border border-line bg-background overflow-hidden shadow-2xl shadow-black/20">
       <div className="flex items-center gap-1.5 px-4 py-3 border-b border-line">
-        <span className="size-2.5 rounded-full bg-accent" />
-        <span className="size-2.5 rounded-full bg-accent-2" />
-        <span className="size-2.5 rounded-full bg-muted/50" />
+        {/* macOS 창 버튼 색 (닫기·최소화·확대) */}
+        <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="size-2.5 rounded-full bg-[#febc2e]" />
+        <span className="size-2.5 rounded-full bg-[#28c840]" />
       </div>
       <div className={fixedAspect ? "relative aspect-[16/10] flex items-center justify-center" : "relative"}>
         {children}
@@ -86,8 +87,7 @@ export default function ProjectsPage() {
     <div className="flex flex-col gap-16 py-6">
       <PageHeader
         eyebrow="Projects"
-        title="만든 것들"
-        description="배포된 것은 라이브로, 아직 로컬인 것은 목업으로 보여줘요."
+        title="포트폴리오"
       />
 
       <div className="flex flex-col gap-6">
@@ -106,7 +106,7 @@ export default function ProjectsPage() {
                   )}
                   {p.status === "live" && (
                     <span className="rounded-full border border-line px-2.5 py-0.5 font-semibold text-foreground">
-                      LIVE
+                      운영 중
                     </span>
                   )}
                   <span className="tabular-nums">{p.period}</span>
@@ -134,13 +134,14 @@ export default function ProjectsPage() {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-2">
+              {/* 링크 버튼은 한 줄로 - 좁은 화면에서도 줄바꿈 없이 */}
+              <div className="flex flex-nowrap gap-2 pt-2">
                 {p.liveUrl && (
                   <a
                     href={p.liveUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-accent-strong text-foreground px-5 py-2.5 text-sm font-bold hover:opacity-85 transition-opacity"
+                    className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-accent-strong text-foreground px-4 py-2.5 text-sm font-bold hover:opacity-85 transition-opacity"
                   >
                     라이브 보기
                     <ExternalLink className="size-4" />
@@ -152,7 +153,7 @@ export default function ProjectsPage() {
                     href={r.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-semibold hover:bg-surface-hover transition-colors"
+                    className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-line px-4 py-2.5 text-sm font-semibold hover:bg-surface-hover transition-colors"
                   >
                     <GithubIcon className="size-4" />
                     {r.label}
