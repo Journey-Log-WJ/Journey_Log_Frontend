@@ -13,6 +13,7 @@ export type PostListItem = {
   title: string;
   excerpt: string | null;
   publishedAt: string | null;
+  thumbnail: string | null;
   tags: Tag[];
 };
 
@@ -41,6 +42,7 @@ function toListItem(p: VelogPost): PostListItem {
     title: p.title,
     excerpt: p.short_description || null,
     publishedAt: p.released_at,
+    thumbnail: p.thumbnail || null,
     tags: toTags(p.tags),
   };
 }
