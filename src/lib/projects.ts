@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
       "GitHub Actions CI/CD + Vercel 배포",
       "Critical CSS · 폰트 · preconnect 성능 최적화",
     ],
-    stack: ["Spring Boot", "PostgreSQL", "TypeScript", "Next.js", "카카오맵", "Vercel"],
+    stack: ["TypeScript", "Spring Boot", "Next.js", "카카오맵", "Vercel", "PostgreSQL"],
     liveUrl: "https://gotcha.it.com/",
     repos: [
       { label: "Frontend", url: "https://github.com/WONJUN-KR/GOTCHA-Frontend" },
@@ -54,7 +54,7 @@ export const PROJECTS: Project[] = [
       "블로그 플랫폼별 발행 통계 조회 API",
       "관리자 대시보드 차트 개선 + 통계 테이블 페이징",
     ],
-    stack: ["Java", "Spring Boot", "JPA", "RabbitMQ", "PostgreSQL", "React"],
+    stack: ["Java", "Spring Boot", "React", "JPA", "RabbitMQ", "PostgreSQL"],
     repos: [
       { label: "Frontend", url: "https://github.com/WONJUN-KR/AI-Auto-Posting-Frontend" },
       { label: "Backend", url: "https://github.com/WONJUN-KR/AI-Auto-Posting-Backend" },
@@ -74,7 +74,7 @@ export const PROJECTS: Project[] = [
       "댓글 시스템 구현",
       "Spring Data JPA 기반 REST API 설계",
     ],
-    stack: ["Java", "Spring Boot", "JPA", "MySQL", "TypeScript"],
+    stack: ["Java", "TypeScript", "Spring Boot", "JPA", "MySQL"],
     repos: [{ label: "Repo", url: "https://github.com/WONJUN-KR/Co-s_House" }],
     logo: "/projects/coshouse.png",
     status: "local",
