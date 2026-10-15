@@ -1,12 +1,14 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+// 데이터는 백엔드 없이 Next.js 서버에서 직접 가져옴: 글·시리즈 = Velog, 잔디 = GitHub (src/lib/velog.ts, github.ts)
+import { contributionAllTime, contributionDays } from "@/lib/github";
+import { velogPost, velogPosts, velogSeries, velogSeriesList, type VelogPost } from "@/lib/velog";
 
 export type Tag = {
-  id: number;
+  id: string;
   name: string;
 };
 
 export type PostListItem = {
-  id: number;
+  id: string;
   slug: string;
   title: string;
   excerpt: string | null;
@@ -20,37 +22,50 @@ export type PostDetail = PostListItem & {
   updatedAt: string;
 };
 
-async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    next: { revalidate: 60 },
-    ...init,
-  });
-  if (!res.ok) {
-    throw new Error(`API ${path} failed: ${res.status}`);
+function decodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    return slug;
   }
-  return res.json() as Promise<T>;
 }
 
+function toTags(tags: string[] | null | undefined): Tag[] {
+  return (tags ?? []).filter(Boolean).map((name) => ({ id: name, name }));
+}
+
+function toListItem(p: VelogPost): PostListItem {
+  return {
+    id: p.id,
+    slug: p.url_slug,
+    title: p.title,
+    excerpt: p.short_description || null,
+    publishedAt: p.released_at,
+    tags: toTags(p.tags),
+  };
+}
+
+// 최신 글이 위
 export async function getPosts(): Promise<PostListItem[]> {
-  return fetchJson<PostListItem[]>("/api/posts");
+  const posts = await velogPosts();
+  return posts
+    .map(toListItem)
+    .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
 }
 
 export async function getPost(slug: string): Promise<PostDetail | null> {
-  let decoded = slug;
-  try {
-    decoded = decodeURIComponent(slug);
-  } catch {
-    // slug already decoded
-  }
-  const url = `${API_BASE}/api/posts/${encodeURIComponent(decoded)}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
-  return res.json() as Promise<PostDetail>;
+  const p = await velogPost(decodeSlug(slug));
+  if (!p) return null;
+  return {
+    ...toListItem(p),
+    content: p.body ?? "",
+    createdAt: p.released_at ?? "",
+    updatedAt: p.updated_at ?? p.released_at ?? "",
+  };
 }
 
 export type SeriesListItem = {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   description: string | null;
@@ -59,7 +74,7 @@ export type SeriesListItem = {
 };
 
 export type SeriesPostItem = {
-  id: number;
+  id: string;
   slug: string;
   title: string;
   excerpt: string | null;
@@ -73,21 +88,29 @@ export type SeriesDetail = SeriesListItem & {
 };
 
 export async function getSeriesList(): Promise<SeriesListItem[]> {
-  return fetchJson<SeriesListItem[]>("/api/series");
+  const list = await velogSeriesList();
+  return list.map((s) => ({
+    id: s.id,
+    slug: s.url_slug,
+    name: s.name,
+    description: s.description?.trim() || null,
+    postsCount: s.posts_count,
+    updatedAt: s.updated_at,
+  }));
 }
 
+// 시리즈 상세는 id 로만 조회돼서 목록에서 slug → id 를 찾음
 export async function getSeries(slug: string): Promise<SeriesDetail | null> {
-  let decoded = slug;
-  try {
-    decoded = decodeURIComponent(slug);
-  } catch {
-    // slug already decoded
-  }
-  const url = `${API_BASE}/api/series/${encodeURIComponent(decoded)}`;
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`API ${url} failed: ${res.status}`);
-  return res.json() as Promise<SeriesDetail>;
+  const target = (await getSeriesList()).find((s) => s.slug === decodeSlug(slug));
+  if (!target) return null;
+  const detail = await velogSeries(target.id);
+  if (!detail) return null;
+  return {
+    ...target,
+    posts: detail.series_posts
+      .map(({ index, post }) => ({ ...toListItem(post), seriesIndex: index }))
+      .sort((a, b) => (a.seriesIndex ?? 0) - (b.seriesIndex ?? 0)),
+  };
 }
 
 export type RoadmapStatus = "PLANNED" | "IN_PROGRESS" | "SUCCEEDED" | "FAILED" | "LEARNED";
@@ -116,19 +139,23 @@ export type ContributionsResponse = {
   days: ContributionDay[];
 };
 
+// 잔디에 합산하는 GitHub 계정 (개인 + 회사)
+export const GITHUB_ACCOUNTS = ["WONJUN-KR", "WonJun-Uxn"];
+
+// 두 계정의 날짜별 기여를 더함 (year 없으면 최근 1년)
 export async function getContributions(year?: string): Promise<ContributionsResponse> {
-  const q = year ? `?year=${encodeURIComponent(year)}` : "";
-  return fetchJson<ContributionsResponse>(`/api/contributions${q}`);
+  const perAccount = await Promise.all(GITHUB_ACCOUNTS.map((login) => contributionDays(login, year)));
+  const merged = new Map<string, number>();
+  for (const days of perAccount) {
+    for (const d of days) merged.set(d.date, (merged.get(d.date) ?? 0) + d.count);
+  }
+  const days = [...merged.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, count]) => ({ date, count }));
+  return { totalCount: days.reduce((sum, d) => sum + d.count, 0), days };
 }
 
-// GitHub 계정 하나의 가입 이후 전체 기여 합계 - 홈 숫자 카드용, 잔디(백엔드 합산)와 별개
+// GitHub 계정 하나의 가입 이후 전체 기여 합계 - 홈 숫자 카드용
 export async function getGithubContributionAllTime(username: string): Promise<number> {
-  const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=all`, {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) throw new Error(`GitHub contributions for ${username} failed: ${res.status}`);
-  const body = (await res.json()) as { total?: Record<string, number> };
-  return Object.values(body.total ?? {}).reduce((sum, n) => sum + n, 0);
+  return contributionAllTime(username);
 }
 
 export type SkillLevel = "상" | "중" | "하";
