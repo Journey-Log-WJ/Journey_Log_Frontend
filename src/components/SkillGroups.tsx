@@ -2,7 +2,7 @@ import type { SkillItem } from "@/lib/api";
 import { groupSkillsByKind } from "@/lib/about";
 import { Chip } from "@/components/ui";
 
-// 홈·Resume 공통 역량 목록 - 키 순서대로 그림
+// Resume 역량 목록 - 키 순서대로 그림
 const SKILL_GROUPS: { key: string; label: string }[] = [
   { key: "backend", label: "Backend" },
   { key: "frontend", label: "Frontend" },

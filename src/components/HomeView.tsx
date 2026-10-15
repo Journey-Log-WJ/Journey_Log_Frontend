@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, BookOpen, Building2, ChevronDown, Mail } from "lucide-react";
 import ContributionsCalendar from "@/components/ContributionsCalendar";
-import SkillGroups from "@/components/SkillGroups";
 import YearSelector from "@/components/YearSelector";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { Chip, SectionHeader } from "@/components/ui";
@@ -145,14 +144,6 @@ export default async function HomeView({ year, about }: { year?: string; about: 
           </div>
         ))}
       </section>
-
-      {/* Tech stack */}
-      {about?.skills && (
-        <section className="animate-fade-up [animation-delay:200ms] flex flex-col gap-8">
-          <SectionHeader eyebrow="Skills" title="역량" />
-          <SkillGroups skills={about.skills} />
-        </section>
-      )}
 
       {/* Projects - 벤토 그리드: 첫 카드는 크게 */}
       <section className="flex flex-col gap-8">
