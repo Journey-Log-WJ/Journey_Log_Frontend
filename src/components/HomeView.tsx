@@ -63,7 +63,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
   return (
     <div className="flex flex-col gap-28 py-6">
       {/* Hero */}
-      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-10 pt-8">
+      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-10 pt-2">
         <div className="flex flex-col gap-6 min-w-0">
           <div className="flex flex-col gap-3">
             <p className="text-lg text-muted">안녕하세요, {profile?.name ?? "WonJun"}입니다.</p>
