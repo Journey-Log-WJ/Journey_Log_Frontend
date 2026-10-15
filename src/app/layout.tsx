@@ -21,10 +21,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // 페이지별 제목은 "연혁 · 오원준 포트폴리오" 처럼 뒤에 사이트 이름이 붙음
   title: { default: "오원준 포트폴리오", template: "%s · 오원준 포트폴리오" },
+  description: "의료 IT 풀스택 개발자",
   openGraph: {
     type: "website",
     siteName: "오원준 포트폴리오",
-    title: "오원준 포트폴리오 | 의료 IT 풀스택 개발자",
+    title: "오원준 포트폴리오",
+    description: "의료 IT 풀스택 개발자",
     url: "/",
     locale: "ko_KR",
   },
