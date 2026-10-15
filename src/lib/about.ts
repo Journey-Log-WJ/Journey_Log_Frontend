@@ -129,7 +129,7 @@ export const ABOUT: AboutContent = {
         },
       ],
       stack: [
-        "Java", "Python", "TypeScript", "Spring Boot", "Flask", "React", "Next.js",
+        "Java", "Python", "JavaScript", "TypeScript", "Spring Boot", "Flask", "React", "Next.js",
         "Spring Security", "JPA", "Tailwind CSS", "Zustand", "ApexCharts",
         "AWS", "Docker", "nginx", "GitHub Actions", "FCM", "PostgreSQL",
       ],
