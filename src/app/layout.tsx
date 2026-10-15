@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import NavLinks from "@/components/NavLinks";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,13 +14,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const NAV_ITEMS = [
-  { href: "/resume", label: "Resume" },
-  { href: "/projects", label: "Projects" },
-  { href: "/log", label: "Log" },
-  { href: "/history", label: "History" },
-];
-
 // 링크 미리보기 이미지 등 절대 주소의 기준 - 도메인 바꾸면 여기만 수정
 const SITE_URL = "https://wonjun-portfolio-kr.vercel.app";
 
@@ -27,10 +21,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // 페이지별 제목은 "연혁 · 오원준 포트폴리오" 처럼 뒤에 사이트 이름이 붙음
   title: { default: "오원준 포트폴리오", template: "%s · 오원준 포트폴리오" },
+  description: "의료 IT 풀스택 개발자",
   openGraph: {
     type: "website",
     siteName: "오원준 포트폴리오",
-    title: "오원준 포트폴리오 | 의료 IT 풀스택 개발자",
+    title: "오원준 포트폴리오",
+    description: "의료 IT 풀스택 개발자",
     url: "/",
     locale: "ko_KR",
   },
@@ -50,17 +46,7 @@ export default function RootLayout({
             <Link href="/" className="font-semibold tracking-tight">
               WONJUN · PORTFOLIO
             </Link>
-            <div className="flex items-center gap-1 text-sm font-semibold text-accent-2">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="px-3 py-1.5 rounded-full hover:text-foreground hover:bg-surface-hover transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
+            <NavLinks />
           </nav>
         </header>
         <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-12">{children}</main>

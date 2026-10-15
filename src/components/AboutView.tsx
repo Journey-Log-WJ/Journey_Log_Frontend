@@ -27,10 +27,7 @@ export default function AboutView({ about }: { about: AboutContent }) {
       <header className="animate-fade-up flex flex-col gap-6 pt-8">
         <Eyebrow>Resume</Eyebrow>
         <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{profile.name}</h1>
-            <span className="rounded-full bg-accent-soft text-accent-2 px-3 py-1 text-xs font-semibold">경력</span>
-          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{profile.name}</h1>
           <p className="text-lg sm:text-xl text-muted">{profile.tagline}</p>
         </div>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
@@ -56,8 +53,7 @@ export default function AboutView({ about }: { about: AboutContent }) {
       </header>
 
       {/* 정보 박스 */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <InfoBox label="경력" value={profile.careerPeriod} sub={profile.isEmployed ? "재직중" : undefined} />
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {currentCareer && <InfoBox label="현재 회사" value={currentCareer.company} sub={currentCareer.role} />}
         <InfoBox label="학력" value="대학교(4년) 졸업" sub="국평원 정보통신학과" />
         <InfoBox label="포트폴리오" value={`총 ${portfolios.length}건`} />
