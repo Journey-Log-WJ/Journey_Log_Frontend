@@ -28,7 +28,7 @@ export function groupSkillsByKind(items: SkillItem[]): { kind?: string; items: S
   return groups;
 }
 
-// 이력서 데이터 - 홈(/)과 About(/about)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
+// 이력서 데이터 - 홈(/)과 Resume(/resume)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
 export const ABOUT: AboutContent = {
   profile: {
     name: "오원준",
@@ -129,8 +129,9 @@ export const ABOUT: AboutContent = {
         },
       ],
       stack: [
-        "Java 21", "Spring Boot", "Spring Security", "JPA", "PostgreSQL", "Python", "Flask",
-        "React", "Next.js", "TypeScript", "Tailwind CSS", "Zustand", "ApexCharts", "AWS", "Docker", "nginx", "GitHub Actions", "FCM",
+        "Java", "Python", "JavaScript", "TypeScript", "Spring Boot", "Flask", "React", "Next.js",
+        "Spring Security", "JPA", "Tailwind CSS", "Zustand", "ApexCharts",
+        "AWS", "Docker", "nginx", "GitHub Actions", "FCM", "PostgreSQL",
       ],
       sortOrder: 1,
     },
@@ -167,8 +168,8 @@ export const ABOUT: AboutContent = {
         },
       ],
       stack: [
-        "Java", "Spring Framework", "Spring Boot", "Spring Security", "eGovFramework", "MyBatis",
-        "Oracle", "MySQL", "JavaScript", "JSP", "jQuery", "Linux(CentOS)", "Docker",
+        "Java", "JavaScript", "Spring Framework", "Spring Boot", "eGovFramework", "JSP",
+        "Spring Security", "MyBatis", "jQuery", "Linux(CentOS)", "Docker", "Oracle", "MySQL",
       ],
       sortOrder: 2,
     },
@@ -205,8 +206,8 @@ export const ABOUT: AboutContent = {
       course: "AI 융합 백엔드 개발 부트캠프",
       period: "2025.06 ~ 2025.12",
       learned: [
-        "Java 21", "Oracle", "MySQL", "JSP", "HTML5", "CSS3", "JavaScript", "jQuery", "React",
-        "Spring Boot", "AI API", "TypeScript", "JPA", "PostgreSQL",
+        "Java", "HTML5", "CSS3", "JavaScript", "TypeScript", "Spring Boot", "JSP", "React",
+        "JPA", "jQuery", "AI API", "Oracle", "MySQL", "PostgreSQL",
       ],
       sortOrder: 1,
     },
@@ -258,7 +259,6 @@ export const ABOUT: AboutContent = {
       { name: "Caddy", level: "중", kind: "웹 서버" },
       { name: "GitHub Actions", level: "상", kind: "CI/CD·배포" },
       { name: "Docker", level: "중", kind: "CI/CD·배포" },
-      { name: "Git", level: "중", kind: "CI/CD·배포" },
     ],
   },
   portfolios: [

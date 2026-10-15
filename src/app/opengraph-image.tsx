@@ -23,8 +23,8 @@ async function loadFont(weight: number, text: string): Promise<ArrayBuffer> {
 }
 
 export default async function Image() {
-  const art = await readFile(join(process.cwd(), "public/img/mocha.jpg"));
-  const artSrc = `data:image/jpeg;base64,${art.toString("base64")}`;
+  const photo = await readFile(join(process.cwd(), "public/img/profile.jpg"));
+  const photoSrc = `data:image/jpeg;base64,${photo.toString("base64")}`;
   const allText = NAME + TAGLINE + SUB + BRAND;
 
   return new ImageResponse(
@@ -51,11 +51,11 @@ export default async function Image() {
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={artSrc}
+          src={photoSrc}
           alt=""
           width={320}
           height={320}
-          style={{ borderRadius: 36, border: "4px solid rgba(245,239,232,0.12)" }}
+          style={{ objectFit: "cover", objectPosition: "center 5%", borderRadius: 36, border: "4px solid rgba(245,239,232,0.12)" }}
         />
       </div>
     ),
