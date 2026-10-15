@@ -28,7 +28,7 @@ export function groupSkillsByKind(items: SkillItem[]): { kind?: string; items: S
   return groups;
 }
 
-// 이력서 데이터 - 홈(/)과 About(/about)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
+// 이력서 데이터 - 홈(/)과 Resume(/resume)이 함께 씀. DB 대신 코드로 관리해서 수정 이력이 커밋으로 남음
 export const ABOUT: AboutContent = {
   profile: {
     name: "오원준",

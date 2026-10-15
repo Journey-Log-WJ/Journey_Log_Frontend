@@ -19,7 +19,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   infra: "DevOps",
 };
 
-// about 페이지 본문 - 데이터는 src/lib/about.ts
+// resume 페이지 본문 - 데이터는 src/lib/about.ts
 export default function AboutView({ about }: { about: AboutContent }) {
 
   const { profile, careers, educations, trainings, certifications, skills, portfolios, military, coverLetter } = about;

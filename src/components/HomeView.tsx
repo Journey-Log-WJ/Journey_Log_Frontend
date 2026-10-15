@@ -221,7 +221,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
       {/* Experience - 타임라인 */}
       {careers.length > 0 && (
         <section className="flex flex-col gap-8">
-          <SectionHeader eyebrow="Experience" title="경력" href="/about" linkLabel="이력서 보기" />
+          <SectionHeader eyebrow="Experience" title="경력" href="/resume" linkLabel="이력서 보기" />
           <ol className="relative flex flex-col gap-4">
             {careers.map((c) => {
               const logo = COMPANY_LOGOS[c.company];

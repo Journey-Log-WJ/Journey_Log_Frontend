@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 const NAV_ITEMS = [
-  { href: "/about", label: "About" },
+  { href: "/resume", label: "Resume" },
   { href: "/projects", label: "Projects" },
   { href: "/log", label: "Log" },
   { href: "/history", label: "History" },
