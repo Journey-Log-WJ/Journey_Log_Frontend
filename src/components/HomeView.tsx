@@ -63,7 +63,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
   return (
     <div className="flex flex-col gap-28 py-6">
       {/* Hero */}
-      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-center gap-10 sm:gap-10 pt-2">
+      <section className="animate-fade-up flex flex-col-reverse sm:flex-row sm:items-start gap-10 sm:gap-10 pt-2">
         <div className="flex flex-col gap-6 min-w-0">
           <div className="flex flex-col gap-3">
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.15] bg-gradient-to-br from-foreground via-foreground to-accent-2 bg-clip-text text-transparent">
@@ -123,7 +123,7 @@ export default async function HomeView({ year, about }: { year?: string; about: 
         </div>
         <div className="shrink-0 size-40 sm:size-60 rounded-3xl overflow-hidden border border-line bg-surface flex items-center justify-center">
           {hasProfileImg ? (
-            <Image src={PROFILE_IMG} alt={profile?.name ?? "WonJun"} width={416} height={416} className="size-full object-cover object-[center_30%]" />
+            <Image src={PROFILE_IMG} alt={profile?.name ?? "WonJun"} width={416} height={416} className="size-full object-cover object-[center_5%]" />
           ) : (
             <span className="text-5xl sm:text-7xl font-bold tracking-tight text-muted/40">WJ</span>
           )}
