@@ -129,8 +129,9 @@ export const ABOUT: AboutContent = {
         },
       ],
       stack: [
-        "Java 21", "Spring Boot", "Spring Security", "JPA", "PostgreSQL", "Python", "Flask",
-        "React", "Next.js", "TypeScript", "Tailwind CSS", "Zustand", "ApexCharts", "AWS", "Docker", "nginx", "GitHub Actions", "FCM",
+        "Java", "Python", "Spring Boot", "Flask", "Spring Security", "JPA", "PostgreSQL",
+        "TypeScript", "React", "Next.js", "Tailwind CSS", "Zustand", "ApexCharts",
+        "AWS", "Docker", "nginx", "GitHub Actions", "FCM",
       ],
       sortOrder: 1,
     },
@@ -167,7 +168,7 @@ export const ABOUT: AboutContent = {
         },
       ],
       stack: [
-        "Java", "Spring Framework", "Spring Boot", "Spring Security", "eGovFramework", "MyBatis",
+        "Java", "Spring Framework", "Spring Boot", "eGovFramework", "Spring Security", "MyBatis",
         "Oracle", "MySQL", "JavaScript", "JSP", "jQuery", "Linux(CentOS)", "Docker",
       ],
       sortOrder: 2,
@@ -205,8 +206,8 @@ export const ABOUT: AboutContent = {
       course: "AI 융합 백엔드 개발 부트캠프",
       period: "2025.06 ~ 2025.12",
       learned: [
-        "Java 21", "Oracle", "MySQL", "JSP", "HTML5", "CSS3", "JavaScript", "jQuery", "React",
-        "Spring Boot", "AI API", "TypeScript", "JPA", "PostgreSQL",
+        "Java", "Spring Boot", "JPA", "Oracle", "MySQL", "PostgreSQL",
+        "HTML5", "CSS3", "JavaScript", "TypeScript", "JSP", "React", "jQuery", "AI API",
       ],
       sortOrder: 1,
     },
