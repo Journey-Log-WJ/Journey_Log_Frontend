@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -8,6 +9,11 @@ import { BackLink, TagList } from "@/components/ui";
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const post = await getPost((await params).slug);
+  return post ? { title: post.title, description: post.excerpt ?? undefined } : {};
+}
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
