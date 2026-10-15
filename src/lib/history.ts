@@ -18,5 +18,5 @@ export const HISTORY: RoadmapItem[] = [
   { id: 4, slug: "compuzone-leave", title: "컴퓨존 퇴사", description: "두 번째 회사 퇴사", period: "2025.04", story: null, status: "LEARNED", targetDate: null, sortOrder: 17 },
   { id: 3, slug: "kernel-academy", title: "커널아카데미", description: "커널아카데미 수강", period: "2025.06", story: null, status: "LEARNED", targetDate: null, sortOrder: 18 },
   { id: 22, slug: "kernel-academy-complete", title: "커널아카데미 수료", description: "AI 융합 백엔드 개발 부트캠프", period: "2025.12", story: null, status: "SUCCEEDED", targetDate: null, sortOrder: 18 },
-  { id: 2, slug: "uxn-join", title: "UXN 이직", description: "UXN에서 개발 중", period: "2026.03", story: null, status: "IN_PROGRESS", targetDate: null, sortOrder: 19 },
+  { id: 2, slug: "uxn-join", title: "UXN 입사", description: "UXN에서 개발 중", period: "2026.03", story: null, status: "IN_PROGRESS", targetDate: null, sortOrder: 19 },
 ];
