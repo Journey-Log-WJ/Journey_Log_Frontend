@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { PROJECTS, type Project } from "@/lib/projects";
 import { GithubIcon } from "@/components/icons";
 import { Chip, PageHeader } from "@/components/ui";
+
+export const metadata: Metadata = { title: "프로젝트" };
 
 function BrowserFrame({ children, fixedAspect = true }: { children: React.ReactNode; fixedAspect?: boolean }) {
   return (

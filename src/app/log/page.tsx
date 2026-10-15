@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, Layers } from "lucide-react";
 import { getPosts, getSeriesList } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 import { PageHeader, SectionHeader, TagList } from "@/components/ui";
+
+export const metadata: Metadata = { title: "기록" };
 
 export default async function LogPage() {
   const [seriesList, posts] = await Promise.all([getSeriesList(), getPosts()]);

@@ -3,7 +3,7 @@ import type { RoadmapItem, RoadmapStatus } from "@/lib/api";
 import { HISTORY } from "@/lib/history";
 import { PageHeader } from "@/components/ui";
 
-export const metadata: Metadata = { title: "연혁 · 저니로그" };
+export const metadata: Metadata = { title: "연혁" };
 
 // 상태 점 색 - 사이트 팔레트(globals.css) 안에서만
 const STATUS: Record<RoadmapStatus, { label: string; color: string }> = {

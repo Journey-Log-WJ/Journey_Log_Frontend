@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSeries } from "@/lib/api";
 import { formatDate } from "@/lib/format";
@@ -7,6 +8,11 @@ import SeriesPostList from "./SeriesPostList";
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const series = await getSeries((await params).slug);
+  return series ? { title: series.name, description: series.description ?? undefined } : {};
+}
 
 export default async function SeriesPage({ params }: PageProps) {
   const { slug } = await params;

@@ -20,9 +20,24 @@ const NAV_ITEMS = [
   { href: "/history", label: "History" },
 ];
 
+// 링크 미리보기 이미지 등 절대 주소의 기준 - 도메인 바꾸면 여기만 수정
+const SITE_URL = "https://wonjun-portfolio-kr.vercel.app";
+const DESCRIPTION = "원준의 살아있는 이력서 - 과거·현재·미래의 기록";
+
 export const metadata: Metadata = {
-  title: "저니로그",
-  description: "원준의 살아있는 이력서 - 과거·현재·미래의 기록",
+  metadataBase: new URL(SITE_URL),
+  // 페이지별 제목은 "연혁 · 오원준 포트폴리오" 처럼 뒤에 사이트 이름이 붙음
+  title: { default: "오원준 포트폴리오", template: "%s · 오원준 포트폴리오" },
+  description: DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: "오원준 포트폴리오",
+    title: "오원준 포트폴리오 | 의료 IT 풀스택 개발자",
+    description: DESCRIPTION,
+    url: "/",
+    locale: "ko_KR",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
@@ -36,7 +51,7 @@ export default function RootLayout({
         <header className="sticky top-0 z-40 border-b border-line bg-background/70 backdrop-blur-xl">
           <nav className="max-w-5xl mx-auto flex items-center justify-between px-6 h-14">
             <Link href="/" className="font-semibold tracking-tight">
-              JourneyLog
+              WONJUN · PORTFOLIO
             </Link>
             <div className="flex items-center gap-1 text-sm font-semibold text-accent-2">
               {NAV_ITEMS.map((item) => (
