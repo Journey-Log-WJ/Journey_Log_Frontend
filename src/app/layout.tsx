@@ -22,18 +22,15 @@ const NAV_ITEMS = [
 
 // 링크 미리보기 이미지 등 절대 주소의 기준 - 도메인 바꾸면 여기만 수정
 const SITE_URL = "https://wonjun-portfolio-kr.vercel.app";
-const DESCRIPTION = "원준의 살아있는 이력서 - 과거·현재·미래의 기록";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // 페이지별 제목은 "연혁 · 오원준 포트폴리오" 처럼 뒤에 사이트 이름이 붙음
   title: { default: "오원준 포트폴리오", template: "%s · 오원준 포트폴리오" },
-  description: DESCRIPTION,
   openGraph: {
     type: "website",
     siteName: "오원준 포트폴리오",
     title: "오원준 포트폴리오 | 의료 IT 풀스택 개발자",
-    description: DESCRIPTION,
     url: "/",
     locale: "ko_KR",
   },
