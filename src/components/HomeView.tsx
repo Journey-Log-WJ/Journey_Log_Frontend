@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, BookOpen, Building2, ChevronDown, Mail } from "lucide-react";
 import ContributionsCalendar from "@/components/ContributionsCalendar";
 import YearSelector from "@/components/YearSelector";
-import { GithubIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { Chip, SectionHeader } from "@/components/ui";
 import {
   getContributions,
@@ -13,7 +13,6 @@ import {
   getPosts,
   type AboutContent,
 } from "@/lib/api";
-import { groupSkillsByKind } from "@/lib/about";
 import { PROJECTS } from "@/lib/projects";
 
 const EARLIEST_YEAR = 2020;
@@ -24,12 +23,6 @@ const COMPANY_LOGOS: Record<string, string> = {
   "(주)유엑스엔": "/logos/uxn.jpg",
   "상상스토리(주)": "/logos/sangs.jpg",
 };
-
-const SKILL_GROUPS: { key: string; label: string }[] = [
-  { key: "backend", label: "Backend" },
-  { key: "frontend", label: "Frontend" },
-  { key: "infra", label: "DevOps" },
-];
 
 const GITHUB_WORK = "WonJun-Uxn";
 const GITHUB_PERSONAL = "WONJUN-KR";
@@ -109,15 +102,26 @@ export default async function HomeView({ year, about }: { year?: string; about: 
                 GitHub
               </a>
             )}
-            {contacts?.velog && (
+            {contacts?.blog && (
               <a
-                href={contacts.velog}
+                href={contacts.blog}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-semibold hover:bg-surface-hover transition-colors"
               >
                 <BookOpen className="size-4" />
-                Velog
+                Blog
+              </a>
+            )}
+            {contacts?.linkedin && (
+              <a
+                href={contacts.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm font-semibold hover:bg-surface-hover transition-colors"
+              >
+                <LinkedinIcon className="size-4" />
+                LinkedIn
               </a>
             )}
           </div>
@@ -139,83 +143,6 @@ export default async function HomeView({ year, about }: { year?: string; about: 
             <span className="text-2xl sm:text-3xl font-bold tracking-tight text-accent-2">{s.value}</span>
           </div>
         ))}
-      </section>
-
-      {/* Tech stack */}
-      {about?.skills && (
-        <section className="animate-fade-up [animation-delay:200ms] flex flex-col gap-8">
-          <SectionHeader eyebrow="Skills" title="역량" />
-          {/* 분야를 위에서 아래로 쌓고, 분야 안에서는 세부 묶음을 한 줄씩 (이름 | 칩) */}
-          <div className="flex flex-col gap-8">
-            {SKILL_GROUPS.filter((g) => about.skills[g.key]?.length).map((g) => (
-              <div key={g.key} className="flex flex-col gap-3">
-                <span className="text-sm font-semibold">{g.label}</span>
-                {groupSkillsByKind(about.skills[g.key]).map((k) => (
-                  <div key={k.kind ?? "all"} className="grid grid-cols-1 sm:grid-cols-[110px_1fr] items-start gap-x-4 gap-y-1.5">
-                    {k.kind ? <span className="pt-1 text-xs text-muted">{k.kind}</span> : <span className="hidden sm:block" />}
-                    <div className="flex flex-wrap gap-2">
-                      {k.items.map((s) => (
-                        <Chip key={s.name}>{s.name}</Chip>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Projects - 벤토 그리드: 첫 카드는 크게 */}
-      <section className="flex flex-col gap-8">
-        <SectionHeader eyebrow="Projects" title="포트폴리오" href="/projects" linkLabel="전체 보기" />
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
-          {featured.map((p, i) => {
-            const isHero = i === 0;
-            const visual = p.thumbnail ?? p.logo;
-            return (
-              <Link
-                key={p.slug}
-                href="/projects"
-                className={`group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-surface transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 ${
-                  isHero ? "md:col-span-2 md:row-span-2" : ""
-                }`}
-              >
-                {visual && (
-                  <div className={`relative bg-background border-b border-line overflow-hidden ${isHero ? "aspect-[16/9]" : "aspect-[16/7]"}`}>
-                    <Image
-                      src={visual}
-                      alt={p.title}
-                      fill
-                      unoptimized
-                      className={`${p.thumbnail ? "object-cover object-top" : "object-contain p-6"} transition-transform duration-500 group-hover:scale-[1.03]`}
-                    />
-                  </div>
-                )}
-                <div className="flex flex-col gap-3 p-6 flex-1">
-                  <div className="flex items-center gap-2 text-xs text-muted">
-                    <span>{p.period}</span>
-                    {p.status === "live" && (
-                      <span className="rounded-full bg-accent-soft text-accent-2 px-2 py-0.5 font-semibold">LIVE</span>
-                    )}
-                  </div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                      <h3 className={`${isHero ? "text-2xl" : "text-lg"} font-bold tracking-tight`}>{p.title}</h3>
-                      <p className="text-sm text-muted">{p.subtitle}</p>
-                    </div>
-                    <ArrowUpRight className="size-5 shrink-0 text-muted transition-all group-hover:text-accent-2 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-                    {p.stack.slice(0, isHero ? 6 : 3).map((s) => (
-                      <Chip key={s}>{s}</Chip>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
       </section>
 
       {/* Experience - 타임라인 */}
@@ -284,6 +211,58 @@ export default async function HomeView({ year, about }: { year?: string; about: 
         </section>
       )}
 
+      {/* Projects - 벤토 그리드: 첫 카드는 크게 */}
+      <section className="flex flex-col gap-8">
+        <SectionHeader eyebrow="Projects" title="포트폴리오" href="/projects" linkLabel="전체 보기" />
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4">
+          {featured.map((p, i) => {
+            const isHero = i === 0;
+            const visual = p.thumbnail ?? p.logo;
+            return (
+              <Link
+                key={p.slug}
+                href="/projects"
+                className={`group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-surface transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 ${
+                  isHero ? "md:col-span-2 md:row-span-2" : ""
+                }`}
+              >
+                {visual && (
+                  <div className={`relative bg-background border-b border-line overflow-hidden ${isHero ? "aspect-[16/9]" : "aspect-[16/7]"}`}>
+                    <Image
+                      src={visual}
+                      alt={p.title}
+                      fill
+                      unoptimized
+                      className={`${p.thumbnail ? "object-cover object-top" : "object-contain p-6"} transition-transform duration-500 group-hover:scale-[1.03]`}
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col gap-3 p-6 flex-1">
+                  <div className="flex items-center gap-2 text-xs text-muted">
+                    <span>{p.period}</span>
+                    {p.status === "live" && (
+                      <span className="rounded-full bg-accent-soft text-accent-2 px-2 py-0.5 font-semibold">LIVE</span>
+                    )}
+                  </div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex flex-col gap-1">
+                      <h3 className={`${isHero ? "text-2xl" : "text-lg"} font-bold tracking-tight`}>{p.title}</h3>
+                      <p className="text-sm text-muted">{p.subtitle}</p>
+                    </div>
+                    <ArrowUpRight className="size-5 shrink-0 text-muted transition-all group-hover:text-accent-2 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+                    {p.stack.slice(0, isHero ? 6 : 3).map((s) => (
+                      <Chip key={s}>{s}</Chip>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Activity - 글 + 잔디 */}
       <section className="flex flex-col gap-8">
         <SectionHeader eyebrow="Activity" title="기록" href="/log" linkLabel="모든 글" />
@@ -330,15 +309,15 @@ export default async function HomeView({ year, about }: { year?: string; about: 
               {profile.email}
             </a>
           )}
-          {contacts?.githubWork && (
+          {contacts?.linkedin && (
             <a
-              href={contacts.githubWork}
+              href={contacts.linkedin}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold hover:bg-surface-hover transition-colors"
             >
-              <GithubIcon className="size-4" />
-              GitHub (회사)
+              <LinkedinIcon className="size-4" />
+              LinkedIn
             </a>
           )}
         </div>
