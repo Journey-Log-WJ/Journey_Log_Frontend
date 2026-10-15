@@ -5,7 +5,7 @@ import { PROJECTS, type Project } from "@/lib/projects";
 import { GithubIcon } from "@/components/icons";
 import { Chip, PageHeader } from "@/components/ui";
 
-export const metadata: Metadata = { title: "프로젝트" };
+export const metadata: Metadata = { title: "포트폴리오" };
 
 function BrowserFrame({ children, fixedAspect = true }: { children: React.ReactNode; fixedAspect?: boolean }) {
   return (
@@ -86,7 +86,7 @@ export default function ProjectsPage() {
     <div className="flex flex-col gap-16 py-6">
       <PageHeader
         eyebrow="Projects"
-        title="만든 것들"
+        title="포트폴리오"
         description="배포된 것은 라이브로, 아직 로컬인 것은 목업으로 보여줘요."
       />
 
