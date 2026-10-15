@@ -1,37 +1,24 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { BookOpen, ExternalLink, Mail, MapPin, Rss } from "lucide-react";
+import { BookOpen, ExternalLink, Mail, MapPin } from "lucide-react";
 import type { AboutContent } from "@/lib/api";
-import { groupSkillsByKind } from "@/lib/about";
-import { GithubIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import SkillGroups from "@/components/SkillGroups";
 import { Chip, Eyebrow } from "@/components/ui";
-
-// 숙련도 표시 - 상은 포인트, 중은 기본, 하는 흐리게
-const LEVEL_STYLE: Record<string, string> = {
-  상: "border-accent/40 bg-accent-soft text-foreground",
-  중: "border-line bg-surface text-foreground",
-  하: "border-line bg-surface text-muted",
-};
-
-const CATEGORY_LABEL: Record<string, string> = {
-  backend: "Backend",
-  frontend: "Frontend",
-  infra: "DevOps",
-};
 
 // resume 페이지 본문 - 데이터는 src/lib/about.ts
 export default function AboutView({ about }: { about: AboutContent }) {
 
   const { profile, careers, educations, trainings, certifications, skills, portfolios, military, coverLetter } = about;
   const sortedCareers = [...careers].sort((a, b) => a.sortOrder - b.sortOrder);
+  const currentCareer = sortedCareers.find((c) => c.isCurrent);
   const sortedEducations = [...educations].sort((a, b) => a.sortOrder - b.sortOrder);
   const sortedTrainings = [...trainings].sort((a, b) => a.sortOrder - b.sortOrder);
 
   const links = [
-    { href: profile.contacts.githubPersonal, label: "GitHub (개인)", icon: <GithubIcon className="size-4" /> },
-    { href: profile.contacts.githubWork, label: "GitHub (회사)", icon: <GithubIcon className="size-4" /> },
-    { href: profile.contacts.velog, label: "Velog", icon: <BookOpen className="size-4" /> },
-    { href: profile.contacts.blog, label: "Blog", icon: <Rss className="size-4" /> },
+    { href: profile.contacts.githubPersonal, label: "GitHub", icon: <GithubIcon className="size-4" /> },
+    { href: profile.contacts.blog, label: "Blog", icon: <BookOpen className="size-4" /> },
+    { href: profile.contacts.linkedin, label: "LinkedIn", icon: <LinkedinIcon className="size-4" /> },
   ].filter((l): l is typeof l & { href: string } => Boolean(l.href));
 
   return (
@@ -71,8 +58,8 @@ export default function AboutView({ about }: { about: AboutContent }) {
       {/* 정보 박스 */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <InfoBox label="경력" value={profile.careerPeriod} sub={profile.isEmployed ? "재직중" : undefined} />
+        {currentCareer && <InfoBox label="현재 회사" value={currentCareer.company} sub={currentCareer.role} />}
         <InfoBox label="학력" value="대학교(4년) 졸업" sub="국평원 정보통신학과" />
-        {profile.desiredSalary && <InfoBox label="희망연봉" value={profile.desiredSalary} />}
         <InfoBox label="포트폴리오" value={`총 ${portfolios.length}건`} />
       </section>
 
@@ -80,33 +67,16 @@ export default function AboutView({ about }: { about: AboutContent }) {
         <p className="whitespace-pre-wrap leading-relaxed text-foreground/90">{profile.intro}</p>
       </Section>
 
-      <Section eyebrow="Skills" title="나의 스킬">
-        {/* 분야를 위에서 아래로 쌓고, 분야 안에서는 세부 묶음을 한 줄씩 (이름 | 칩) */}
-        <div className="flex flex-col gap-8">
-          {Object.entries(skills).map(([category, items]) => (
-            <div key={category} className="flex flex-col gap-3">
-              <h3 className="text-sm font-semibold">{CATEGORY_LABEL[category] ?? category}</h3>
-              {groupSkillsByKind(items).map((g) => (
-                <div key={g.kind ?? "all"} className="grid grid-cols-1 sm:grid-cols-[110px_1fr] items-start gap-x-4 gap-y-1.5">
-                  {g.kind ? <span className="pt-1 text-xs text-muted">{g.kind}</span> : <span className="hidden sm:block" />}
-                  <div className="flex flex-wrap gap-2">
-                    {g.items.map((skill) => (
-                      <span
-                        key={skill.name}
-                        className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs ${
-                          LEVEL_STYLE[skill.level ?? "중"]
-                        }`}
-                      >
-                        {skill.name}
-                        {skill.level && <span className="text-[10px] font-semibold text-accent-2">{skill.level}</span>}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
+      <Section eyebrow="Cover Letter" title="자기소개서">
+        <div className="rounded-3xl border border-line bg-surface p-6 sm:p-10">
+          <div className="prose prose-invert max-w-none prose-headings:font-[family-name:var(--font-display)] prose-p:text-foreground/90 prose-li:text-foreground/90 prose-strong:text-foreground prose-a:text-accent-2">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{coverLetter}</ReactMarkdown>
+          </div>
         </div>
+      </Section>
+
+      <Section eyebrow="Skills" title="역량">
+        <SkillGroups skills={skills} />
       </Section>
 
       <Section eyebrow="Experience" title="경력" sub={profile.careerPeriod}>
@@ -163,7 +133,7 @@ export default function AboutView({ about }: { about: AboutContent }) {
         </Timeline>
       </Section>
 
-      <Section eyebrow="Training" title="경험 · 활동 · 교육">
+      <Section eyebrow="Training" title="교육">
         <Timeline>
           {sortedTrainings.map((t, idx) => (
             <TimelineItem key={idx} period={t.period}>
@@ -225,14 +195,6 @@ export default function AboutView({ about }: { about: AboutContent }) {
             </li>
           ))}
         </ul>
-      </Section>
-
-      <Section eyebrow="Cover Letter" title="자기소개서">
-        <div className="rounded-3xl border border-line bg-surface p-6 sm:p-10">
-          <div className="prose prose-invert max-w-none prose-headings:font-[family-name:var(--font-display)] prose-p:text-foreground/90 prose-li:text-foreground/90 prose-strong:text-foreground prose-a:text-accent-2">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{coverLetter}</ReactMarkdown>
-          </div>
-        </div>
       </Section>
     </div>
   );
