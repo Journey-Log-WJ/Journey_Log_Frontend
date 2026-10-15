@@ -12,6 +12,7 @@ export type VelogPost = {
   updated_at: string | null;
   short_description: string | null;
   tags: string[] | null;
+  thumbnail: string | null;
   body?: string | null;
 };
 
@@ -43,7 +44,7 @@ async function velog<T>(query: string, variables: Record<string, unknown>): Prom
   return json.data;
 }
 
-const POST_FIELDS = "id title url_slug released_at updated_at short_description tags";
+const POST_FIELDS = "id title url_slug released_at updated_at short_description tags thumbnail";
 
 // 글 목록 - cursor(마지막 글 id)로 끝까지
 export async function velogPosts(): Promise<VelogPost[]> {

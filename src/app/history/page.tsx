@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import type { RoadmapItem, RoadmapStatus } from "@/lib/api";
+import type { RoadmapItem } from "@/lib/api";
 import { HISTORY } from "@/lib/history";
 import { PageHeader } from "@/components/ui";
 
 export const metadata: Metadata = { title: "연혁" };
-
-// 상태 점 색 - 사이트 팔레트(globals.css) 안에서만
-const STATUS: Record<RoadmapStatus, { label: string; color: string }> = {
-  SUCCEEDED: { label: "성공", color: "var(--color-forest-300)" },
-  FAILED: { label: "실패", color: "var(--color-brick)" },
-  LEARNED: { label: "경험", color: "var(--color-latte)" },
-  IN_PROGRESS: { label: "진행", color: "var(--color-cream)" },
-  PLANNED: { label: "계획", color: "var(--color-espresso-300)" },
-};
-
-const LEGEND: RoadmapStatus[] = ["SUCCEEDED", "FAILED", "LEARNED", "IN_PROGRESS"];
 
 // period "2024.11" → 연도별로 묶고, 연도·항목 모두 최신이 위
 function groupByYear(items: RoadmapItem[]): { year: string; items: RoadmapItem[] }[] {
@@ -37,15 +26,6 @@ export default function HistoryPage() {
     <div className="flex flex-col gap-12 py-6">
       <PageHeader eyebrow="History" title="연혁" />
 
-      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-        {LEGEND.map((s) => (
-          <li key={s} className="inline-flex items-center gap-2">
-            <Dot status={s} />
-            {STATUS[s].label}
-          </li>
-        ))}
-      </ul>
-
       <div className="flex flex-col">
         {years.map(({ year, items }) => (
           <section key={year} className="grid grid-cols-[72px_1fr] sm:grid-cols-[160px_1fr] gap-4 sm:gap-8 border-t border-line py-8">
@@ -59,7 +39,6 @@ export default function HistoryPage() {
                   <span className="pt-0.5 text-sm tabular-nums text-muted">{item.period ? `${item.period.slice(5, 7)}월` : ""}</span>
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Dot status={item.status} />
                       <h3 className="font-semibold tracking-tight">{item.title}</h3>
                       {item.status === "IN_PROGRESS" && (
                         <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent-2">진행 중</span>
@@ -75,8 +54,4 @@ export default function HistoryPage() {
       </div>
     </div>
   );
-}
-
-function Dot({ status }: { status: RoadmapStatus }) {
-  return <span className="size-2 shrink-0 rounded-full" style={{ background: STATUS[status].color }} aria-hidden />;
 }

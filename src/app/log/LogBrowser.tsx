@@ -1,0 +1,206 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { BookOpen, ChevronLeft, ChevronRight, Funnel, FunnelX, Layers, Search } from "lucide-react";
+import type { PostListItem } from "@/lib/api";
+import { SectionHeader } from "@/components/ui";
+
+// 한 페이지 9개 (3칸 x 3줄), 페이지 번호는 네이버 블로그처럼 10개씩 묶음
+const PAGE_SIZE = 9;
+const PAGE_GROUP = 10;
+
+// 날짜는 서버에서 문자열로 만들어 넘김 (서버·브라우저 시간대가 달라도 화면이 같도록)
+export type LogPost = PostListItem & { date: string; seriesIds: string[] };
+export type LogSeries = { id: string; name: string; postsCount: number; updated: string };
+
+// 기록 목록 - 시리즈 카드는 필터, 검색어는 제목·요약·태그에서 찾음, 썸네일 갤러리를 페이지로 나눔
+export default function LogBrowser({ posts, seriesList }: { posts: LogPost[]; seriesList: LogSeries[] }) {
+  const [seriesId, setSeriesId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return posts.filter((p) => {
+      if (seriesId && !p.seriesIds.includes(seriesId)) return false;
+      if (!q) return true;
+      return [p.title, p.excerpt ?? "", ...p.tags.map((t) => t.name)].some((s) => s.toLowerCase().includes(q));
+    });
+  }, [posts, seriesId, query]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const current = Math.min(page, totalPages);
+  const visible = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
+  const selected = seriesList.find((s) => s.id === seriesId);
+  const groupStart = Math.floor((current - 1) / PAGE_GROUP) * PAGE_GROUP + 1;
+  const groupEnd = Math.min(groupStart + PAGE_GROUP - 1, totalPages);
+
+  function goPage(n: number) {
+    setPage(n);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function selectSeries(id: string) {
+    setSeriesId((prev) => (prev === id ? null : id));
+    setPage(1);
+  }
+
+  return (
+    <>
+      {seriesList.length > 0 && (
+        <section className="flex flex-col gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {seriesList.map((series) => {
+              const active = series.id === seriesId;
+              return (
+                <button
+                  key={series.id}
+                  type="button"
+                  onClick={() => selectSeries(series.id)}
+                  aria-pressed={active}
+                  className={`group flex flex-col gap-4 rounded-3xl border p-6 text-left transition-all hover:-translate-y-1 ${
+                    active ? "border-accent bg-accent-soft" : "border-line bg-surface hover:border-accent/40"
+                  }`}
+                >
+                  {/* 오른쪽 위 깔때기 = 누르면 이 시리즈 글만 걸러짐 (선택 중이면 해제 아이콘) */}
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="flex size-10 items-center justify-center rounded-xl bg-accent-soft">
+                      <Layers className="size-5 text-accent-2" />
+                    </span>
+                    {active ? (
+                      <FunnelX className="size-5 text-accent-2" aria-label="필터 해제" />
+                    ) : (
+                      <Funnel className="size-5 text-muted transition-colors group-hover:text-accent-2" aria-label="이 시리즈로 필터" />
+                    )}
+                  </div>
+                  <h3 className="text-lg font-bold tracking-tight">{series.name}</h3>
+                  <div className="flex items-center gap-2 text-xs text-muted">
+                    <span>{series.postsCount}개 글</span>
+                    {series.updated && (
+                      <>
+                        <span>·</span>
+                        <span>{series.updated} 업데이트</span>
+                      </>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <section className="flex flex-col gap-8">
+        {/* 제목 왼쪽, 검색창 오른쪽 한 줄 (좁은 화면에선 아래로) */}
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <SectionHeader eyebrow="All Posts" title={selected ? `${selected.name} ${filtered.length}` : `전체 글 ${filtered.length}`} />
+          <div className="flex items-center gap-2">
+            <label className="relative w-full sm:w-72">
+              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="제목, 내용, 태그로 검색"
+                className="w-full rounded-full border border-line bg-surface py-2.5 pl-11 pr-4 text-sm placeholder:text-muted focus:border-accent/60 focus:outline-none"
+              />
+            </label>
+            {selected && (
+              <button
+                type="button"
+                onClick={() => selectSeries(selected.id)}
+                className="shrink-0 rounded-full border border-line px-4 py-2.5 text-sm font-semibold hover:bg-surface-hover transition-colors"
+              >
+                시리즈 해제
+              </button>
+            )}
+          </div>
+        </div>
+
+        {visible.length === 0 ? (
+          <p className="text-muted">{posts.length === 0 ? "아직 글이 없습니다." : "조건에 맞는 글이 없어요."}</p>
+        ) : (
+          <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {visible.map((post) => (
+              <li key={post.id}>
+                <Link
+                  href={`/log/${post.slug}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface transition-all hover:-translate-y-1 hover:border-accent/40"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden border-b border-line bg-background">
+                    {post.thumbnail ? (
+                      // Velog 이미지 CDN 을 그대로 씀
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={post.thumbnail}
+                        alt=""
+                        loading="lazy"
+                        className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center">
+                        <BookOpen className="size-8 text-muted/40" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-1 px-4 py-3.5">
+                    <h3 className="text-sm font-bold tracking-tight line-clamp-2 group-hover:text-accent-2 transition-colors">
+                      {post.title}
+                    </h3>
+                    <time className="text-xs tabular-nums text-muted">{post.date}</time>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {totalPages > 1 && (
+          <nav className="flex items-center justify-center gap-1" aria-label="페이지">
+            {/* 이전·다음은 10페이지 묶음 단위로 넘김 */}
+            {groupStart > 1 && (
+              <PageButton onClick={() => goPage(groupStart - 1)} label="이전 10페이지">
+                <ChevronLeft className="size-4" />
+              </PageButton>
+            )}
+            {Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => groupStart + i).map((n) => (
+              <PageButton key={n} active={n === current} onClick={() => goPage(n)} label={`${n}페이지`}>
+                {n}
+              </PageButton>
+            ))}
+            {groupEnd < totalPages && (
+              <PageButton onClick={() => goPage(groupEnd + 1)} label="다음 10페이지">
+                <ChevronRight className="size-4" />
+              </PageButton>
+            )}
+          </nav>
+        )}
+      </section>
+    </>
+  );
+}
+
+function PageButton({ children, onClick, label, active = false }: {
+  children: React.ReactNode;
+  onClick: () => void;
+  label: string;
+  active?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-current={active ? "page" : undefined}
+      className={`flex size-9 items-center justify-center rounded-full text-sm tabular-nums font-semibold transition-colors ${
+        active ? "bg-accent-strong text-foreground" : "text-muted hover:bg-surface-hover hover:text-foreground"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}

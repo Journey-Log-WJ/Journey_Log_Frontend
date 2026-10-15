@@ -13,6 +13,7 @@ export type PostListItem = {
   title: string;
   excerpt: string | null;
   publishedAt: string | null;
+  thumbnail: string | null;
   tags: Tag[];
 };
 
@@ -41,6 +42,7 @@ function toListItem(p: VelogPost): PostListItem {
     title: p.title,
     excerpt: p.short_description || null,
     publishedAt: p.released_at,
+    thumbnail: p.thumbnail || null,
     tags: toTags(p.tags),
   };
 }
@@ -158,9 +160,8 @@ export async function getGithubContributionAllTime(username: string): Promise<nu
   return contributionAllTime(username);
 }
 
-export type SkillLevel = "상" | "중" | "하";
 // kind: 같은 분야(백엔드 등) 안의 세부 묶음 - 언어·프레임워크·라이브러리·데이터베이스
-export type SkillItem = { name: string; level?: SkillLevel; kind?: string };
+export type SkillItem = { name: string; kind?: string };
 
 export type CareerProject = {
   title: string;
@@ -221,12 +222,10 @@ export type AboutProfile = {
   region: string;
   careerPeriod: string;
   isEmployed: boolean;
-  desiredSalary?: string;
   contacts: {
     githubPersonal?: string;
-    githubWork?: string;
-    velog?: string;
     blog?: string;
+    linkedin?: string;
   };
   intro: string;
 };
