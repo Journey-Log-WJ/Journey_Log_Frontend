@@ -258,7 +258,6 @@ export const ABOUT: AboutContent = {
       { name: "Caddy", level: "중", kind: "웹 서버" },
       { name: "GitHub Actions", level: "상", kind: "CI/CD·배포" },
       { name: "Docker", level: "중", kind: "CI/CD·배포" },
-      { name: "Git", level: "중", kind: "CI/CD·배포" },
     ],
   },
   portfolios: [
